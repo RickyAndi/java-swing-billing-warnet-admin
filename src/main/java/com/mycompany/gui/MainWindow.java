@@ -36,6 +36,7 @@ public class MainWindow extends javax.swing.JFrame {
         mainPanel = new javax.swing.JPanel();
         signInPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -94,15 +95,23 @@ public class MainWindow extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(180, 234, 246));
 
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/Login 1.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 371, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 347, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jLabel15)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         signInPanel.add(jPanel3);
@@ -305,9 +314,9 @@ public class MainWindow extends javax.swing.JFrame {
             dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
@@ -521,6 +530,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
