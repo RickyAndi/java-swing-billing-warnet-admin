@@ -10,6 +10,9 @@ import com.mycompany.application.enums.ErrorMessage;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import com.mycompany.application.repositories.UserRepository;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 /**
@@ -35,9 +38,17 @@ public class ApplicationState {
         this.currentUser = currentUser;
     }
 
-    public void login(String username, String plainPassword) throws UserDoesNotExistException {
+    public void login(String username, String plainPassword) throws UserDoesNotExistException, NoSuchAlgorithmException {
+
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        md.update(plainPassword.getBytes());
+        byte[] digest = md.digest();
+        String hashedPassword = DatatypeConverter
+                .printHexBinary(digest).toLowerCase();
+
         Optional<User> userOptional = this.userRepository
-                .getUserByUsernameAndPassword(username, plainPassword);
+                .getUserByUsernameAndPassword(username, hashedPassword);
 
         setCurrentUser(userOptional);
 
