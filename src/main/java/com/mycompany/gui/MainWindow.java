@@ -6,11 +6,13 @@
 package com.mycompany.gui;
 
 import com.mycompany.application.ApplicationState;
+import com.mycompany.application.enums.ErrorMessage;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Insets;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.border.Border;
 
@@ -519,9 +521,9 @@ public class MainWindow extends javax.swing.JFrame {
         try {
             this.applicationState.login(username, password);
         } catch (UserDoesNotExistException exception) {
-            
+            JOptionPane.showMessageDialog(null, exception.getMessage());
         } catch (Exception exception) {
-            
+            JOptionPane.showMessageDialog(null, ErrorMessage.GENERAL_UNKNOWN_ERROR.message);
         }
         
     }//GEN-LAST:event_loginButtonActionPerformed
