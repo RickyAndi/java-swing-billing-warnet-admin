@@ -5,14 +5,17 @@
  */
 package com.mycompany.application;
 
+import com.mycompany.application.entities.Computer;
 import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
+import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.UserRepository;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,20 +25,18 @@ import java.util.Optional;
 public class ApplicationState {
 
     private Optional<User> currentUser;
+    private List<Computer> clientComputers;
 
     private UserRepository userRepository;
+    private ComputerRepository computerRepository;
 
-    public ApplicationState(UserRepository userRepository) {
+    public ApplicationState(
+            UserRepository userRepository,
+            ComputerRepository computerRepository
+    ) {
 
         this.userRepository = userRepository;
-    }
-
-    public Optional<User> getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(Optional<User> currentUser) {
-        this.currentUser = currentUser;
+        this.computerRepository = computerRepository;
     }
 
     public void loginAction(String username, String plainPassword) throws Exception {
@@ -51,6 +52,10 @@ public class ApplicationState {
         }
     }
 
+    public void getClientComputersAction() {
+        clientComputers = this.computerRepository.getComputers();
+    }
+
     private String turnPasswordToHash(String plainPassword) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
 
@@ -59,6 +64,18 @@ public class ApplicationState {
         String hashedPassword = DatatypeConverter
                 .printHexBinary(digest).toLowerCase();
         return hashedPassword;
+    }
+
+    public Optional<User> getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(Optional<User> currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public List<Computer> getClientComputers() {
+        return clientComputers;
     }
 
     public Boolean isUserBeingLoggedIn() {
