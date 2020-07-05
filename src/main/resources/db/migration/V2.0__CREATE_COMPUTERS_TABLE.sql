@@ -2,10 +2,10 @@
 drop table if exists computers;
 
 create table computers (
-    `id` int(11) auto_increment primary key,
+    `id` int auto_increment primary key,
     `name` varchar(255) not null,
-    'current_username' varchar(255) null,
-    'last_start_datetime' datetime null,
+    `current_username` varchar(255) null,
+    `last_start` datetime null,
     `status` tinyint not null
 ) ENGINE = INNODB;
 
