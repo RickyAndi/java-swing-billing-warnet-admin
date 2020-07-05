@@ -1,7 +1,11 @@
 package com.mycompany.billingwarnetadmin;
 
 import com.mycompany.application.ApplicationState;
+import com.mycompany.application.entities.Computer;
+import com.mycompany.application.entities.Setting;
+import com.mycompany.application.entities.Transaction;
 import com.mycompany.application.entities.User;
+import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.UserRepository;
 import com.mycompany.gui.MainWindow;
 import org.hibernate.Session;
@@ -12,11 +16,13 @@ import org.hibernate.service.ServiceRegistry;
 
 public class Application {
     public static void main(String[] args) {
-
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
 
         configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Computer.class);
+        configuration.addAnnotatedClass(Setting.class);
+        configuration.addAnnotatedClass(Transaction.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())
@@ -26,8 +32,12 @@ public class Application {
         Session session = sessionFactory.openSession();
 
         UserRepository userRepository = new UserRepository(session);
+        ComputerRepository computerRepository = new ComputerRepository(session);
 
-        ApplicationState applicationState = new ApplicationState(userRepository);
+        ApplicationState applicationState = new ApplicationState(
+                userRepository,
+                computerRepository
+        );
 
         MainWindow mainWindow = new MainWindow(applicationState);
 
