@@ -6,7 +6,7 @@
 package com.mycompany.application;
 
 import com.mycompany.application.entities.User;
-import com.mycompany.application.enums.ErrorMessage;
+import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import com.mycompany.application.repositories.UserRepository;
 
@@ -38,23 +38,27 @@ public class ApplicationState {
         this.currentUser = currentUser;
     }
 
-    public void login(String username, String plainPassword) throws UserDoesNotExistException, NoSuchAlgorithmException {
+    public void loginAction(String username, String plainPassword) throws Exception {
 
-        MessageDigest md = MessageDigest.getInstance("MD5");
-
-        md.update(plainPassword.getBytes());
-        byte[] digest = md.digest();
-        String hashedPassword = DatatypeConverter
-                .printHexBinary(digest).toLowerCase();
-
+        String hashedPassword = turnPasswordToHash(plainPassword);
         Optional<User> userOptional = this.userRepository
                 .getUserByUsernameAndPassword(username, hashedPassword);
 
         setCurrentUser(userOptional);
 
         if (!isUserBeingLoggedIn()) {
-            throw new UserDoesNotExistException(ErrorMessage.ADMIN_DOES_NOT_EXIST.message);
+            throw new UserDoesNotExistException(ErrorMessageEnum.ADMIN_DOES_NOT_EXIST.message);
         }
+    }
+
+    private String turnPasswordToHash(String plainPassword) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        md.update(plainPassword.getBytes());
+        byte[] digest = md.digest();
+        String hashedPassword = DatatypeConverter
+                .printHexBinary(digest).toLowerCase();
+        return hashedPassword;
     }
 
     public Boolean isUserBeingLoggedIn() {
