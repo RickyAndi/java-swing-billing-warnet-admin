@@ -6,15 +6,13 @@
 package com.mycompany.gui;
 
 import com.mycompany.application.ApplicationState;
-import com.mycompany.application.enums.ErrorMessage;
+import com.mycompany.application.entities.User;
+import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
+import java.awt.CardLayout;
+import java.util.Optional;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
 import javax.swing.JOptionPane;
-import javax.swing.JRootPane;
-import javax.swing.border.Border;
 
 /**
  *
@@ -23,14 +21,21 @@ import javax.swing.border.Border;
 public class MainWindow extends javax.swing.JFrame {
 
     private ApplicationState applicationState;
+    private CardLayout mainPanelCardLayout;
+    private CardLayout dashboardContentPanelCardLayout;
+    
     /**
      * Creates new form MainWindow
      */
     public MainWindow(ApplicationState applicationState) {
 
         this.applicationState = applicationState;
-
+        
         initComponents();
+        
+        this.mainPanelCardLayout = (CardLayout) mainPanel.getLayout();
+        this.dashboardContentPanelCardLayout = (CardLayout) dashboardContentPanel
+                .getLayout();
     }
 
     /**
@@ -49,30 +54,31 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         usernameTextField = new javax.swing.JTextField();
-        passwordTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         loginButton = new javax.swing.JButton();
+        passwordTextField = new javax.swing.JPasswordField();
         dashboardPanel = new javax.swing.JPanel();
         dashboardTabsPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        toMonitorClientPageButton = new javax.swing.JButton();
+        toHistoryPageButton = new javax.swing.JButton();
+        toSettingPageButton = new javax.swing.JButton();
+        toProfilePageButton = new javax.swing.JButton();
+        logoutButton = new javax.swing.JButton();
         dashboardContentPanel = new javax.swing.JPanel();
         dashboardContentMonitorPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        computerClientsTable = new javax.swing.JTable();
         dashboardContentHistoryPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        historyTable = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
         dashboardContentSettingPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -85,12 +91,12 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentProfilePanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        profileUsernameTextField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
+        profilePasswordTextField = new javax.swing.JPasswordField();
+        profileRepeatPasswordTextField = new javax.swing.JPasswordField();
         dashboardContentLogoutPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -133,9 +139,6 @@ public class MainWindow extends javax.swing.JFrame {
         usernameTextField.setBackground(new java.awt.Color(245, 245, 245));
         usernameTextField.setBorder(null);
 
-        passwordTextField.setBackground(new java.awt.Color(245, 245, 245));
-        passwordTextField.setBorder(null);
-
         jLabel2.setText("Username");
 
         jLabel3.setText("Password");
@@ -150,6 +153,9 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        passwordTextField.setBackground(new java.awt.Color(245, 245, 245));
+        passwordTextField.setBorder(null);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -162,13 +168,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(usernameTextField)
-                    .addComponent(passwordTextField)
+                    .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(passwordTextField))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -183,43 +189,68 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42))
         );
 
         signInPanel.add(jPanel2);
 
-        mainPanel.add(signInPanel, "cardSignIn");
+        mainPanel.add(signInPanel, "signinPanelCard");
 
         dashboardTabsPanel.setBackground(new java.awt.Color(255, 255, 255));
         dashboardTabsPanel.setLayout(new java.awt.GridLayout(1, 5));
 
-        jButton1.setBackground(new java.awt.Color(180, 234, 246));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/booking.png"))); // NOI18N
-        jButton1.setText("Monitor");
-        dashboardTabsPanel.add(jButton1);
+        toMonitorClientPageButton.setBackground(new java.awt.Color(180, 234, 246));
+        toMonitorClientPageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/booking.png"))); // NOI18N
+        toMonitorClientPageButton.setText("Monitor");
+        toMonitorClientPageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toMonitorClientPageButtonActionPerformed(evt);
+            }
+        });
+        dashboardTabsPanel.add(toMonitorClientPageButton);
 
-        jButton2.setBackground(new java.awt.Color(180, 234, 246));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/history.png"))); // NOI18N
-        jButton2.setText("History");
-        dashboardTabsPanel.add(jButton2);
+        toHistoryPageButton.setBackground(new java.awt.Color(180, 234, 246));
+        toHistoryPageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/history.png"))); // NOI18N
+        toHistoryPageButton.setText("History");
+        toHistoryPageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toHistoryPageButtonActionPerformed(evt);
+            }
+        });
+        dashboardTabsPanel.add(toHistoryPageButton);
 
-        jButton3.setBackground(new java.awt.Color(180, 234, 246));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/settings.png"))); // NOI18N
-        jButton3.setText("Setting");
-        dashboardTabsPanel.add(jButton3);
+        toSettingPageButton.setBackground(new java.awt.Color(180, 234, 246));
+        toSettingPageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/settings.png"))); // NOI18N
+        toSettingPageButton.setText("Setting");
+        toSettingPageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toSettingPageButtonActionPerformed(evt);
+            }
+        });
+        dashboardTabsPanel.add(toSettingPageButton);
 
-        jButton4.setBackground(new java.awt.Color(180, 234, 246));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/person.png"))); // NOI18N
-        jButton4.setText("Profile");
-        dashboardTabsPanel.add(jButton4);
+        toProfilePageButton.setBackground(new java.awt.Color(180, 234, 246));
+        toProfilePageButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/person.png"))); // NOI18N
+        toProfilePageButton.setText("Profile");
+        toProfilePageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toProfilePageButtonActionPerformed(evt);
+            }
+        });
+        dashboardTabsPanel.add(toProfilePageButton);
 
-        jButton5.setBackground(new java.awt.Color(180, 234, 246));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/logout.png"))); // NOI18N
-        jButton5.setText("Log Out");
-        dashboardTabsPanel.add(jButton5);
+        logoutButton.setBackground(new java.awt.Color(180, 234, 246));
+        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/logout.png"))); // NOI18N
+        logoutButton.setText("Log Out");
+        logoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutButtonActionPerformed(evt);
+            }
+        });
+        dashboardTabsPanel.add(logoutButton);
 
         dashboardContentPanel.setBackground(new java.awt.Color(180, 234, 246));
         dashboardContentPanel.setLayout(new java.awt.CardLayout());
@@ -228,18 +259,33 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel4.setText("Data Monitoring Client");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        computerClientsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "PC", "Username", "Tanggal", "Jam Mulai", "Waktu", "Tarif", "Status"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(computerClientsTable);
 
         javax.swing.GroupLayout dashboardContentMonitorPanelLayout = new javax.swing.GroupLayout(dashboardContentMonitorPanel);
         dashboardContentMonitorPanel.setLayout(dashboardContentMonitorPanelLayout);
@@ -264,17 +310,15 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        dashboardContentPanel.add(dashboardContentMonitorPanel, "card2");
+        dashboardContentPanel.add(dashboardContentMonitorPanel, "monitorClientPanelCard");
 
         dashboardContentHistoryPanel.setBackground(new java.awt.Color(180, 234, 246));
 
         jLabel5.setText("Data History Client");
 
-        jButton6.setText("jButton6");
+        jButton6.setText("Cari");
 
-        jTextField3.setText("jTextField3");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        historyTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -285,7 +329,7 @@ public class MainWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(historyTable);
 
         jLabel6.setText("Billing Client");
 
@@ -295,7 +339,7 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+            .addGap(0, 235, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,15 +353,17 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 338, Short.MAX_VALUE))
                     .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -327,22 +373,23 @@ public class MainWindow extends javax.swing.JFrame {
             dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5))
+                .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                         .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                            .addComponent(jTextField3))
+                            .addComponent(jTextField3)
+                            .addComponent(jTextField1))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        dashboardContentPanel.add(dashboardContentHistoryPanel, "card3");
+        dashboardContentPanel.add(dashboardContentHistoryPanel, "historyPanelCard");
 
         dashboardContentSettingPanel.setBackground(new java.awt.Color(180, 234, 246));
 
@@ -401,25 +448,30 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        dashboardContentPanel.add(dashboardContentSettingPanel, "card4");
+        dashboardContentPanel.add(dashboardContentSettingPanel, "settingPanelCard");
 
         dashboardContentProfilePanel.setBackground(new java.awt.Color(180, 234, 246));
+        dashboardContentProfilePanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                dashboardContentProfilePanelComponentShown(evt);
+            }
+        });
 
         jLabel11.setText("Profile");
 
         jLabel12.setText("Username");
 
-        jTextField7.setText("jTextField7");
-
         jLabel13.setText("Password");
-
-        jTextField8.setText("jTextField8");
 
         jLabel14.setText("Ulangi Password");
 
-        jTextField9.setText("jTextField9");
-
         jButton8.setText("Simpan");
+
+        profilePasswordTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                profilePasswordTextFieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dashboardContentProfilePanelLayout = new javax.swing.GroupLayout(dashboardContentProfilePanel);
         dashboardContentProfilePanel.setLayout(dashboardContentProfilePanelLayout);
@@ -430,12 +482,12 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(dashboardContentProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel11)
                     .addComponent(jLabel12)
-                    .addComponent(jTextField7)
+                    .addComponent(profileUsernameTextField)
                     .addComponent(jLabel13)
-                    .addComponent(jTextField8)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField9)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                    .addComponent(profilePasswordTextField)
+                    .addComponent(profileRepeatPasswordTextField))
                 .addContainerGap(379, Short.MAX_VALUE))
         );
         dashboardContentProfilePanelLayout.setVerticalGroup(
@@ -446,21 +498,21 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profileUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profilePasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profileRepeatPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
-        dashboardContentPanel.add(dashboardContentProfilePanel, "card5");
+        dashboardContentPanel.add(dashboardContentProfilePanel, "profilePanelCard");
 
         dashboardContentLogoutPanel.setBackground(new java.awt.Color(180, 234, 246));
 
@@ -475,7 +527,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 316, Short.MAX_VALUE)
         );
 
-        dashboardContentPanel.add(dashboardContentLogoutPanel, "card6");
+        dashboardContentPanel.add(dashboardContentLogoutPanel, "logoutPanelCard");
 
         javax.swing.GroupLayout dashboardPanelLayout = new javax.swing.GroupLayout(dashboardPanel);
         dashboardPanel.setLayout(dashboardPanelLayout);
@@ -496,7 +548,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGap(0, 321, Short.MAX_VALUE)))
         );
 
-        mainPanel.add(dashboardPanel, "card3");
+        mainPanel.add(dashboardPanel, "dashboardPanelCard");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -519,18 +571,55 @@ public class MainWindow extends javax.swing.JFrame {
         String password = passwordTextField.getText();
         
         try {
-            this.applicationState.login(username, password);
+            
+            this.applicationState.loginAction(username, password);
+            
+            this.mainPanelCardLayout.show(mainPanel, "dashboardPanelCard");
+            this.dashboardContentPanelCardLayout.show(dashboardContentPanel, "monitorClientPanelCard");
+            
         } catch (UserDoesNotExistException exception) {
-            JOptionPane.showMessageDialog(null, exception.getMessage());
+            JOptionPane.showMessageDialog(this, exception.getMessage());
         } catch (Exception exception) {
-            JOptionPane.showMessageDialog(null, ErrorMessage.GENERAL_UNKNOWN_ERROR.message);
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.GENERAL_UNKNOWN_ERROR.message);
         }
         
     }//GEN-LAST:event_loginButtonActionPerformed
 
+    private void profilePasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profilePasswordTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_profilePasswordTextFieldActionPerformed
+
+    private void dashboardContentProfilePanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentProfilePanelComponentShown
+        Optional<User> currentUser = this.applicationState.getCurrentUser();
+        if (currentUser.isPresent()) {
+            profileUsernameTextField.setText(currentUser.get().getUsername());
+        }
+    }//GEN-LAST:event_dashboardContentProfilePanelComponentShown
+
+    private void toMonitorClientPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toMonitorClientPageButtonActionPerformed
+        dashboardContentPanelCardLayout.show(dashboardContentPanel, "monitorClientPanelCard");
+    }//GEN-LAST:event_toMonitorClientPageButtonActionPerformed
+
+    private void toHistoryPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toHistoryPageButtonActionPerformed
+        dashboardContentPanelCardLayout.show(dashboardContentPanel, "historyPanelCard");
+    }//GEN-LAST:event_toHistoryPageButtonActionPerformed
+
+    private void toSettingPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toSettingPageButtonActionPerformed
+        dashboardContentPanelCardLayout.show(dashboardContentPanel, "settingPanelCard");
+    }//GEN-LAST:event_toSettingPageButtonActionPerformed
+
+    private void toProfilePageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toProfilePageButtonActionPerformed
+        dashboardContentPanelCardLayout.show(dashboardContentPanel, "profilePanelCard");
+    }//GEN-LAST:event_toProfilePageButtonActionPerformed
+
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+        dashboardContentPanelCardLayout.show(dashboardContentPanel, "logoutPanelCard");
+    }//GEN-LAST:event_logoutButtonActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable computerClientsTable;
     private javax.swing.JPanel dashboardContentHistoryPanel;
     private javax.swing.JPanel dashboardContentLogoutPanel;
     private javax.swing.JPanel dashboardContentMonitorPanel;
@@ -539,11 +628,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel dashboardContentSettingPanel;
     private javax.swing.JPanel dashboardPanel;
     private javax.swing.JPanel dashboardTabsPanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JTable historyTable;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -567,19 +652,23 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JButton loginButton;
+    private javax.swing.JButton logoutButton;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JTextField passwordTextField;
+    private javax.swing.JPasswordField passwordTextField;
+    private javax.swing.JPasswordField profilePasswordTextField;
+    private javax.swing.JPasswordField profileRepeatPasswordTextField;
+    private javax.swing.JTextField profileUsernameTextField;
     private javax.swing.JPanel signInPanel;
+    private javax.swing.JButton toHistoryPageButton;
+    private javax.swing.JButton toMonitorClientPageButton;
+    private javax.swing.JButton toProfilePageButton;
+    private javax.swing.JButton toSettingPageButton;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }
