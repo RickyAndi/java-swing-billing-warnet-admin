@@ -6,13 +6,16 @@
 package com.mycompany.gui;
 
 import com.mycompany.application.ApplicationState;
+import com.mycompany.application.entities.Computer;
 import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import java.awt.CardLayout;
+import java.util.List;
 import java.util.Optional;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -69,7 +72,7 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentMonitorPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        computerClientsTable = new javax.swing.JTable();
+        clientComputersTable = new javax.swing.JTable();
         dashboardContentHistoryPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
@@ -256,10 +259,15 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentPanel.setLayout(new java.awt.CardLayout());
 
         dashboardContentMonitorPanel.setBackground(new java.awt.Color(180, 234, 246));
+        dashboardContentMonitorPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                dashboardContentMonitorPanelComponentShown(evt);
+            }
+        });
 
         jLabel4.setText("Data Monitoring Client");
 
-        computerClientsTable.setModel(new javax.swing.table.DefaultTableModel(
+        clientComputersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -285,7 +293,7 @@ public class MainWindow extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(computerClientsTable);
+        jScrollPane2.setViewportView(clientComputersTable);
 
         javax.swing.GroupLayout dashboardContentMonitorPanelLayout = new javax.swing.GroupLayout(dashboardContentMonitorPanel);
         dashboardContentMonitorPanel.setLayout(dashboardContentMonitorPanelLayout);
@@ -616,10 +624,38 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentPanelCardLayout.show(dashboardContentPanel, "logoutPanelCard");
     }//GEN-LAST:event_logoutButtonActionPerformed
 
+    private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
+        DefaultTableModel clientComputersTableModel = new DefaultTableModel();
+        clientComputersTableModel.addColumn("PC");
+        clientComputersTableModel.addColumn("Username");
+        clientComputersTableModel.addColumn("Tanggal");
+        clientComputersTableModel.addColumn("Jam Mulai");
+        clientComputersTableModel.addColumn("Waktu");
+        clientComputersTableModel.addColumn("Tarif");
+        clientComputersTableModel.addColumn("Status");
+        
+        applicationState.getClientComputersAction();
+        List<Computer> computers = applicationState.getClientComputers();
+        
+        for (Computer computer : computers) {
+            clientComputersTableModel.addRow(new String[] {
+                    computer.getName(), 
+                    computer.isActive() ? computer.getCurrentUsername() : "-", 
+                    computer.isActive() ? computer.getLastStart().toString() : "-", 
+                    computer.isActive() ? computer.getLastStart().toString() : "-", 
+                    computer.isActive() ? computer.getLastStart().toString() : "-", 
+                    computer.isActive() ? computer.getLastStart().toString() : "-",
+                    computer.isActive() ? "Aktif" : "Tidak aktif"
+                });
+        }
+        
+        clientComputersTable.setModel(clientComputersTableModel);
+    }//GEN-LAST:event_dashboardContentMonitorPanelComponentShown
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable computerClientsTable;
+    private javax.swing.JTable clientComputersTable;
     private javax.swing.JPanel dashboardContentHistoryPanel;
     private javax.swing.JPanel dashboardContentLogoutPanel;
     private javax.swing.JPanel dashboardContentMonitorPanel;
