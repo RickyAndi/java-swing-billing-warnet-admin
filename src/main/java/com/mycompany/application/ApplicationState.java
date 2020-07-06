@@ -7,12 +7,15 @@ package com.mycompany.application;
 
 import com.mycompany.application.entities.Computer;
 import com.mycompany.application.entities.Setting;
+import com.mycompany.application.entities.Transaction;
 import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.enums.SettingNameEnum;
+import com.mycompany.application.enums.TransactionStatusEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.SettingRepository;
+import com.mycompany.application.repositories.TransactionRepository;
 import com.mycompany.application.repositories.UserRepository;
 
 import javax.xml.bind.DatatypeConverter;
@@ -27,7 +30,7 @@ import java.util.Optional;
  */
 public class ApplicationState {
 
-    private Optional<User> currentUser;
+    private Optional<User> currentUser = Optional.empty();
 
     private Setting internetCafeNameSetting;
     private Setting internetCafeAddressSetting;
@@ -35,20 +38,25 @@ public class ApplicationState {
     private Setting costIncreasingPerMinuteSetting;
 
     private List<Computer> clientComputers;
+    private List<Transaction> transactions;
+    private Optional<Transaction> selectedTransaction = Optional.empty();
 
     private UserRepository userRepository;
     private ComputerRepository computerRepository;
     private SettingRepository settingRepository;
+    private TransactionRepository transactionRepository;
 
     public ApplicationState(
             UserRepository userRepository,
             ComputerRepository computerRepository,
-            SettingRepository settingRepository
+            SettingRepository settingRepository,
+            TransactionRepository transactionRepository
     ) {
 
         this.userRepository = userRepository;
         this.computerRepository = computerRepository;
         this.settingRepository = settingRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public void loginAction(String username, String plainPassword) throws Exception {
@@ -88,7 +96,12 @@ public class ApplicationState {
                 .getSettingByName(SettingNameEnum.BIAYA_DITAMBAHKAN_SETIAP_BERAPA_MENIT.name)
                 .get()
         );
+    }
 
+    public void getTransactionsAction() {
+        List<Transaction> transactions = this.transactionRepository
+                .getTransactionsByStatusNot(TransactionStatusEnum.ACTIVE.value);
+        setTransactions(transactions);
     }
 
     private String turnPasswordToHash(String plainPassword) throws NoSuchAlgorithmException {
@@ -147,5 +160,21 @@ public class ApplicationState {
 
     public Setting getCostPerHourSetting() {
         return costPerHourSetting;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setSelectedTransaction(Optional<Transaction> selectedTransaction) {
+        this.selectedTransaction = selectedTransaction;
+    }
+
+    public Optional<Transaction> getSelectedTransaction() {
+        return selectedTransaction;
     }
 }

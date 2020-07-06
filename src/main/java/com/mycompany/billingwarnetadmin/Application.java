@@ -7,6 +7,7 @@ import com.mycompany.application.entities.Transaction;
 import com.mycompany.application.entities.User;
 import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.SettingRepository;
+import com.mycompany.application.repositories.TransactionRepository;
 import com.mycompany.application.repositories.UserRepository;
 import com.mycompany.gui.MainWindow;
 import org.hibernate.Session;
@@ -35,11 +36,13 @@ public class Application {
         UserRepository userRepository = new UserRepository(session);
         ComputerRepository computerRepository = new ComputerRepository(session);
         SettingRepository settingRepository = new SettingRepository(session);
+        TransactionRepository transactionRepository = new TransactionRepository(session);
 
         ApplicationState applicationState = new ApplicationState(
                 userRepository,
                 computerRepository,
-                settingRepository
+                settingRepository,
+                transactionRepository
         );
 
         MainWindow mainWindow = new MainWindow(applicationState);

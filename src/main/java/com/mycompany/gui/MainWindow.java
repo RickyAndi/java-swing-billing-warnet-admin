@@ -8,7 +8,9 @@ package com.mycompany.gui;
 import com.mycompany.application.ApplicationState;
 import com.mycompany.application.entities.Computer;
 import com.mycompany.application.entities.Setting;
+import com.mycompany.application.entities.Transaction;
 import com.mycompany.application.entities.User;
+import com.mycompany.application.enums.CurrencyAbbrevationEnum;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import java.awt.CardLayout;
@@ -32,7 +34,7 @@ public class MainWindow extends javax.swing.JFrame {
     private ApplicationState applicationState;
     private CardLayout mainPanelCardLayout;
     private CardLayout dashboardContentPanelCardLayout;
-    
+    private CardLayout historyChangeTransactionStatusPanelCardLayout;
     /**
      * Creates new form MainWindow
      */
@@ -45,6 +47,8 @@ public class MainWindow extends javax.swing.JFrame {
         this.mainPanelCardLayout = (CardLayout) mainPanel.getLayout();
         this.dashboardContentPanelCardLayout = (CardLayout) dashboardContentPanel
                 .getLayout();
+        this.historyChangeTransactionStatusPanelCardLayout = 
+                (CardLayout) historyChangeTransactionStatusPanel.getLayout();
     }
 
     /**
@@ -87,6 +91,31 @@ public class MainWindow extends javax.swing.JFrame {
         historyTable = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        historyWarnetNameLabel = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        historyWarnetAddressLabel = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        historyTransactionTanggalLabel = new javax.swing.JLabel();
+        historyTransactionNumberLabel = new javax.swing.JLabel();
+        historyTransactionPcNameLabel = new javax.swing.JLabel();
+        historyTransactionUsernameLabel = new javax.swing.JLabel();
+        historyTransactionTariffLabel = new javax.swing.JLabel();
+        historyChangeTransactionStatusPanel = new javax.swing.JPanel();
+        historyNotPaidTransactionPanel = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        historyTransactionAmountPaidByClient = new javax.swing.JTextField();
+        historyTransactionPayButton = new javax.swing.JButton();
+        historyPaidTransactionPanelCard = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        historyTransactionPaidAmountByClientLabel = new javax.swing.JLabel();
+        historyTransactionChangeLabel = new javax.swing.JLabel();
+        historyTransactionStatusLabel = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         dashboardContentSettingPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -127,7 +156,7 @@ public class MainWindow extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 347, Short.MAX_VALUE)
+                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -135,7 +164,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel15)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         signInPanel.add(jPanel3);
@@ -170,7 +199,7 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(141, Short.MAX_VALUE)
+                .addContainerGap(208, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(159, 159, 159))
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -199,7 +228,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42))
         );
@@ -317,7 +346,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(dashboardContentMonitorPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE))
                 .addContainerGap())
         );
         dashboardContentMonitorPanelLayout.setVerticalGroup(
@@ -326,17 +355,27 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
         );
 
         dashboardContentPanel.add(dashboardContentMonitorPanel, "monitorClientPanelCard");
 
         dashboardContentHistoryPanel.setBackground(new java.awt.Color(180, 234, 246));
+        dashboardContentHistoryPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                dashboardContentHistoryPanelComponentShown(evt);
+            }
+        });
 
         jLabel5.setText("Data History Client");
 
         jButton6.setText("Cari");
+
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
 
         historyTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -349,21 +388,234 @@ public class MainWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        historyTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                historyTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(historyTable);
 
         jLabel6.setText("Billing Client");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        historyWarnetNameLabel.setText("Nama warnet");
+
+        jLabel16.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel16.setText("Tanggal");
+
+        jLabel17.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel17.setText("No Bukti");
+
+        jLabel18.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel18.setText("PC");
+
+        historyWarnetAddressLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyWarnetAddressLabel.setText("alamat warnet");
+
+        jLabel19.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel19.setText("Username");
+
+        jLabel20.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel20.setText("Tariff");
+
+        historyTransactionTanggalLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionTanggalLabel.setText("-");
+
+        historyTransactionNumberLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionNumberLabel.setText("-");
+
+        historyTransactionPcNameLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionPcNameLabel.setText("-");
+
+        historyTransactionUsernameLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionUsernameLabel.setText("-");
+
+        historyTransactionTariffLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionTariffLabel.setText("-");
+
+        historyChangeTransactionStatusPanel.setBackground(new java.awt.Color(255, 255, 255));
+        historyChangeTransactionStatusPanel.setLayout(new java.awt.CardLayout());
+
+        historyNotPaidTransactionPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel26.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel26.setText("Bayar");
+
+        historyTransactionPayButton.setText("Bayar");
+
+        javax.swing.GroupLayout historyNotPaidTransactionPanelLayout = new javax.swing.GroupLayout(historyNotPaidTransactionPanel);
+        historyNotPaidTransactionPanel.setLayout(historyNotPaidTransactionPanelLayout);
+        historyNotPaidTransactionPanelLayout.setHorizontalGroup(
+            historyNotPaidTransactionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(historyNotPaidTransactionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(historyNotPaidTransactionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(historyTransactionPayButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(historyNotPaidTransactionPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel26)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addComponent(historyTransactionAmountPaidByClient, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        historyNotPaidTransactionPanelLayout.setVerticalGroup(
+            historyNotPaidTransactionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(historyNotPaidTransactionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(historyNotPaidTransactionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(historyTransactionAmountPaidByClient, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(historyTransactionPayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        historyChangeTransactionStatusPanel.add(historyNotPaidTransactionPanel, "historyNotPaidTransactionPanelCard");
+
+        historyPaidTransactionPanelCard.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel21.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel21.setText("Bayar");
+
+        jLabel22.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel22.setText("Kembali");
+
+        jLabel23.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel23.setText("Keterangan");
+
+        jButton1.setText("Cetak");
+
+        historyTransactionPaidAmountByClientLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionPaidAmountByClientLabel.setText("-");
+
+        historyTransactionChangeLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionChangeLabel.setText("-");
+
+        historyTransactionStatusLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        historyTransactionStatusLabel.setText("-");
+
+        javax.swing.GroupLayout historyPaidTransactionPanelCardLayout = new javax.swing.GroupLayout(historyPaidTransactionPanelCard);
+        historyPaidTransactionPanelCard.setLayout(historyPaidTransactionPanelCardLayout);
+        historyPaidTransactionPanelCardLayout.setHorizontalGroup(
+            historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
+                        .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel21)
+                            .addComponent(jLabel22)
+                            .addComponent(jLabel23))
+                        .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(historyTransactionPaidAmountByClientLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(historyTransactionChangeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(historyTransactionStatusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)))))
+                .addContainerGap())
+        );
+        historyPaidTransactionPanelCardLayout.setVerticalGroup(
+            historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(historyTransactionPaidAmountByClientLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(historyTransactionChangeLabel)
+                    .addComponent(jLabel22))
+                .addGap(18, 18, 18)
+                .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(historyTransactionStatusLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        historyChangeTransactionStatusPanel.add(historyPaidTransactionPanelCard, "historyPaidTransactionPanelCard");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 235, Short.MAX_VALUE)
+            .addComponent(historyChangeTransactionStatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel17))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel16)))
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(historyTransactionNumberLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(historyTransactionTanggalLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addComponent(historyWarnetNameLabel))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(historyWarnetAddressLabel)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addGap(72, 72, 72)
+                                .addComponent(historyTransactionPcNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel19)
+                                .addGap(24, 24, 24)
+                                .addComponent(historyTransactionUsernameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(historyTransactionTariffLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(historyWarnetNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(historyWarnetAddressLabel)
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(historyTransactionTanggalLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17)
+                    .addComponent(historyTransactionNumberLabel))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addComponent(historyTransactionPcNameLabel))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(historyTransactionUsernameLabel)
+                    .addComponent(jLabel19))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(historyTransactionTariffLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(historyChangeTransactionStatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout dashboardContentHistoryPanelLayout = new javax.swing.GroupLayout(dashboardContentHistoryPanel);
@@ -375,15 +627,17 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(0, 338, Short.MAX_VALUE))
-                    .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
-                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 478, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardContentHistoryPanelLayout.createSequentialGroup()
+                        .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
+                                .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -404,7 +658,7 @@ public class MainWindow extends javax.swing.JFrame {
                             .addComponent(jTextField3)
                             .addComponent(jTextField1))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -449,7 +703,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(settingCostPerHourTextField)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
-                .addContainerGap(379, Short.MAX_VALUE))
+                .addContainerGap(512, Short.MAX_VALUE))
         );
         dashboardContentSettingPanelLayout.setVerticalGroup(
             dashboardContentSettingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -470,7 +724,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(settingCostPerHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         dashboardContentPanel.add(dashboardContentSettingPanel, "settingPanelCard");
@@ -513,7 +767,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                     .addComponent(profilePasswordTextField)
                     .addComponent(profileRepeatPasswordTextField))
-                .addContainerGap(379, Short.MAX_VALUE))
+                .addContainerGap(512, Short.MAX_VALUE))
         );
         dashboardContentProfilePanelLayout.setVerticalGroup(
             dashboardContentProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -534,7 +788,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(profileRepeatPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         dashboardContentPanel.add(dashboardContentProfilePanel, "profilePanelCard");
@@ -545,11 +799,11 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentLogoutPanel.setLayout(dashboardContentLogoutPanelLayout);
         dashboardContentLogoutPanelLayout.setHorizontalGroup(
             dashboardContentLogoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 743, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
         dashboardContentLogoutPanelLayout.setVerticalGroup(
             dashboardContentLogoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 316, Short.MAX_VALUE)
+            .addGap(0, 378, Short.MAX_VALUE)
         );
 
         dashboardContentPanel.add(dashboardContentLogoutPanel, "logoutPanelCard");
@@ -566,11 +820,11 @@ public class MainWindow extends javax.swing.JFrame {
             dashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardPanelLayout.createSequentialGroup()
                 .addGap(0, 62, Short.MAX_VALUE)
-                .addComponent(dashboardContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(dashboardContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(dashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(dashboardPanelLayout.createSequentialGroup()
                     .addComponent(dashboardTabsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 321, Short.MAX_VALUE)))
+                    .addGap(0, 383, Short.MAX_VALUE)))
         );
 
         mainPanel.add(dashboardPanel, "dashboardPanelCard");
@@ -579,13 +833,13 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 876, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -640,8 +894,8 @@ public class MainWindow extends javax.swing.JFrame {
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         dashboardContentPanelCardLayout.show(dashboardContentPanel, "logoutPanelCard");
     }//GEN-LAST:event_logoutButtonActionPerformed
-
-    private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
+    
+    public void prepareClientComputersTableModelAndAddComputersData(List<Computer> computers) {
         DefaultTableModel clientComputersTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int i, int i1) {
@@ -657,22 +911,25 @@ public class MainWindow extends javax.swing.JFrame {
         clientComputersTableModel.addColumn("Tarif");
         clientComputersTableModel.addColumn("Status");
         
-        applicationState.getClientComputersAction();
-        List<Computer> computers = applicationState.getClientComputers();
-        
         for (Computer computer : computers) {
             clientComputersTableModel.addRow(new String[] {
-                    computer.getName(), 
-                    getComputerCurrentUsername(computer), 
-                    getComputerLastStartDate(computer), 
-                    getComputerLastStartTime(computer), 
-                    getComputerActiveTime(computer), 
-                    getComputerCurrentTarif(computer),
-                    getComputerStatus(computer)
-                });
+                computer.getName(), 
+                getComputerCurrentUsername(computer), 
+                getComputerLastStartDate(computer), 
+                getComputerLastStartTime(computer), 
+                getComputerActiveTime(computer), 
+                getComputerCurrentTarif(computer),
+                getComputerStatus(computer)
+            });
         }
         
         clientComputersTable.setModel(clientComputersTableModel);
+    }
+    
+    private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
+        applicationState.getClientComputersAction();
+        List<Computer> computers = applicationState.getClientComputers();
+        prepareClientComputersTableModelAndAddComputersData(computers);
     }//GEN-LAST:event_dashboardContentMonitorPanelComponentShown
 
     private void dashboardPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardPanelComponentShown
@@ -684,10 +941,170 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_settingCostPerHourTextFieldActionPerformed
 
     private void dashboardContentSettingPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentSettingPanelComponentShown
-        settingWarnetNameTextField.setText(this.applicationState.getInternetCafeNameSetting().getStringValue());
-        settingWarnetAddressTextField.setText(this.applicationState.getInternetCafeAddressSetting().getStringValue());
-        settingCostPerHourTextField.setText(this.applicationState.getCostPerHourSetting().getDecimalValue().toString());
+        settingWarnetNameTextField
+                .setText(this.applicationState.getInternetCafeNameSetting()
+                        .getStringValue()
+                );
+        settingWarnetAddressTextField
+                .setText(this.applicationState.getInternetCafeAddressSetting()
+                        .getStringValue()
+                );
+        settingCostPerHourTextField
+                .setText(this.applicationState.getCostPerHourSetting()
+                        .getDecimalValue().toString()
+                );
     }//GEN-LAST:event_dashboardContentSettingPanelComponentShown
+     
+    private void prepareHistoryTableModelAndAddHistoryTransactionsData(List<Transaction> transactions) {
+        DefaultTableModel historyTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return false; //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+         
+        historyTableModel.addColumn("No Bukti");
+        historyTableModel.addColumn("PC");
+        historyTableModel.addColumn("Username");
+        historyTableModel.addColumn("Tanggal");
+        historyTableModel.addColumn("Jam mulai");
+        historyTableModel.addColumn("Waktu");
+        historyTableModel.addColumn("Tarif");
+        historyTableModel.addColumn("Keterangan");
+        
+        for (Transaction transaction : transactions) {
+            historyTableModel.addRow(new String[] {
+                getTransactionNumber(transaction), 
+                transaction.getComputer().getName(), 
+                transaction.getUsername(),
+                getTransactionStartOnDate(transaction),
+                getTransactionStartOnTime(transaction), 
+                getTransactionDuration(transaction), 
+                getTransactionTariff(transaction),
+                getTransactionStatus(transaction)
+            });
+        }
+        
+        historyTable.setModel(historyTableModel);
+    }
+    
+    private void dashboardContentHistoryPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentHistoryPanelComponentShown
+        historyWarnetNameLabel
+                .setText(applicationState.getInternetCafeNameSetting()
+                        .getStringValue()
+                );
+        historyWarnetAddressLabel
+                .setText(applicationState.getInternetCafeAddressSetting()
+                        .getStringValue()
+                );
+  
+        this.applicationState.getTransactionsAction();
+        List<Transaction> transactions = applicationState.getTransactions();
+        this.prepareHistoryTableModelAndAddHistoryTransactionsData(transactions);
+    }//GEN-LAST:event_dashboardContentHistoryPanelComponentShown
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void historyTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_historyTableMouseClicked
+        Integer rowNumber = historyTable.rowAtPoint(evt.getPoint());
+        Integer selectedTransactionId = Integer
+                .parseInt(
+                        historyTable.getValueAt(rowNumber, 0)
+                            .toString()
+                );
+        List<Transaction> transactions = this.applicationState.getTransactions();
+        Transaction selectedTransaction = transactions.stream()
+                .filter(transaction -> selectedTransactionId.equals(transaction.getId()))
+                .findAny()
+                .orElse(null);
+        
+        applicationState.setSelectedTransaction(Optional.of(selectedTransaction));
+        
+        historyTransactionTanggalLabel
+                .setText(getTransactionStartOnDate(selectedTransaction));
+        historyTransactionNumberLabel
+                .setText(getTransactionNumber(selectedTransaction));
+        historyTransactionPcNameLabel
+                .setText(selectedTransaction.getComputer().getName());
+        historyTransactionUsernameLabel
+                .setText(selectedTransaction.getUsername());
+        historyTransactionTariffLabel
+                .setText(getTransactionTariff(selectedTransaction));
+        
+        if (selectedTransaction.isNotPaid()) {
+            this.historyChangeTransactionStatusPanelCardLayout
+                    .show(historyChangeTransactionStatusPanel, "historyNotPaidTransactionPanelCard");
+        } else {
+            this.historyChangeTransactionStatusPanelCardLayout
+                    .show(historyChangeTransactionStatusPanel, "historyPaidTransactionPanelCard");
+            historyTransactionPaidAmountByClientLabel
+                    .setText(getTransactionAmountPaidByClient(selectedTransaction));
+            historyTransactionChangeLabel
+                    .setText(getTransactionChangeAmount(selectedTransaction));
+            historyTransactionStatusLabel
+                    .setText(getTransactionStatus(selectedTransaction));
+        }
+    }//GEN-LAST:event_historyTableMouseClicked
+    
+    private String getTransactionAmountPaidByClient(Transaction transaction) {
+        return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
+                ". " + 
+                new DecimalFormat("#0.00")
+                    .format(transaction.getAmountPaidByClient());
+    }
+    
+    private String getTransactionChangeAmount(Transaction transaction) {
+        return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr +
+                ". " + 
+                new DecimalFormat("#0.00")
+                    .format(transaction.getAmountChange());
+    }
+    
+    private String getTransactionStartOnDate(Transaction transaction) {
+        return new SimpleDateFormat("dd-MM-yyyy")
+                .format(transaction.getStartOn());
+    }
+    
+    private String getTransactionStartOnTime(Transaction transaction) {
+        return new SimpleDateFormat("HH:mm")
+                .format(transaction.getStartOn());
+    }
+    
+    private String getTransactionNumber(Transaction transaction) {
+        return String.valueOf(transaction.getId());
+    }
+    
+    private String getTransactionDuration(Transaction transaction) {
+        Long startTimestamp = transaction.getStartOn().getTime();
+        Long endTimestamp = transaction.getEndOn().getTime();
+        Long differencesInMinutes = TimeUnit.MILLISECONDS.toMinutes(endTimestamp - startTimestamp);
+        
+        Long minutesRemainder = differencesInMinutes % 60;
+        Long hours = (differencesInMinutes - minutesRemainder) / 60;
+        
+        return hours.toString() + " : " + minutesRemainder.toString();
+    }
+    
+    public String getTransactionTariff(Transaction transaction) {
+        return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
+                ". " + 
+                new DecimalFormat("#0.00")
+                    .format(transaction.getAmountToBePaid());
+    }
+    
+    public String getTransactionStatus(Transaction transaction) {
+        if (transaction.isNotPaid()) {
+            return "Belum lunas";
+        }
+        
+        if (transaction.isPaid()) {
+            return "Lunas";
+        }
+        
+        return "Aktif";
+    }
     
     private String getComputerCurrentUsername(Computer computer) {
         return computer.isActive() ? computer.getCurrentUsername() : "-";
@@ -744,7 +1161,10 @@ public class MainWindow extends javax.swing.JFrame {
                 .getIntegerValue().doubleValue();
         Double totalTarif = timesOfPerMinute * costPerMinutesSetting;
         
-        return "Rp. " + new DecimalFormat("#0.00").format(totalTarif);
+        return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
+                " " + 
+                new DecimalFormat("#0.00")
+                        .format(totalTarif);
     }
     
     private Long getComputerCurrentTimeAndLastStartTimeDifferencesInMinutes(Computer computer) {
@@ -771,7 +1191,23 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel dashboardContentSettingPanel;
     private javax.swing.JPanel dashboardPanel;
     private javax.swing.JPanel dashboardTabsPanel;
+    private javax.swing.JPanel historyChangeTransactionStatusPanel;
+    private javax.swing.JPanel historyNotPaidTransactionPanel;
+    private javax.swing.JPanel historyPaidTransactionPanelCard;
     private javax.swing.JTable historyTable;
+    private javax.swing.JTextField historyTransactionAmountPaidByClient;
+    private javax.swing.JLabel historyTransactionChangeLabel;
+    private javax.swing.JLabel historyTransactionNumberLabel;
+    private javax.swing.JLabel historyTransactionPaidAmountByClientLabel;
+    private javax.swing.JButton historyTransactionPayButton;
+    private javax.swing.JLabel historyTransactionPcNameLabel;
+    private javax.swing.JLabel historyTransactionStatusLabel;
+    private javax.swing.JLabel historyTransactionTanggalLabel;
+    private javax.swing.JLabel historyTransactionTariffLabel;
+    private javax.swing.JLabel historyTransactionUsernameLabel;
+    private javax.swing.JLabel historyWarnetAddressLabel;
+    private javax.swing.JLabel historyWarnetNameLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -782,7 +1218,16 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
