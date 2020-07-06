@@ -1,4 +1,6 @@
 
+drop table if exists `transactions`;
+
 create table `transactions` (
      `id` int auto_increment primary key,
      `computer_id` int(11) null,

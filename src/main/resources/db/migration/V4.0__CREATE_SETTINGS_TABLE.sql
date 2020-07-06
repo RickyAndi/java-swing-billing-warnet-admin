@@ -10,4 +10,5 @@ create table `settings` (
 
 insert into settings (name, type, string_value) values ('NAMA_WARNET', 'string', 'HOMEINET-ID');
 insert into settings (name, type, string_value) values ('ALAMAT_WARNET', 'string', 'Jl. Gajah mada no 11, Kota Batu, Jawa timur');
-insert into settings (name, type, integer_value) values ('BIAYA_PER_JAM', 'integer', 5000);
+insert into settings (name, type, decimal_value) values ('BIAYA_PER_JAM', 'decimal', 5000);
+insert into settings (name, type, integer_value) values ('BIAYA_DITAMBAHKAN_SETIAP_BERAPA_MENIT', 'integer', 10);

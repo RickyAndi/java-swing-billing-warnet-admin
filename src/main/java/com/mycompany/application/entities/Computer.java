@@ -1,5 +1,7 @@
 package com.mycompany.application.entities;
 
+import com.mycompany.application.enums.ComputerStatusEnum;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -67,6 +69,6 @@ public class Computer {
     }
 
     public Boolean isActive() {
-        return this.getStatus() != 0;
+        return this.getStatus().equals(ComputerStatusEnum.ACTIVE.value);
     }
 }

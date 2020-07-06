@@ -7,12 +7,18 @@ package com.mycompany.gui;
 
 import com.mycompany.application.ApplicationState;
 import com.mycompany.application.entities.Computer;
+import com.mycompany.application.entities.Setting;
 import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import java.awt.CardLayout;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -85,11 +91,11 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentSettingPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        settingWarnetNameTextField = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        settingWarnetAddressTextField = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        settingCostPerHourTextField = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         dashboardContentProfilePanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -201,6 +207,12 @@ public class MainWindow extends javax.swing.JFrame {
         signInPanel.add(jPanel2);
 
         mainPanel.add(signInPanel, "signinPanelCard");
+
+        dashboardPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                dashboardPanelComponentShown(evt);
+            }
+        });
 
         dashboardTabsPanel.setBackground(new java.awt.Color(255, 255, 255));
         dashboardTabsPanel.setLayout(new java.awt.GridLayout(1, 5));
@@ -400,20 +412,25 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardContentPanel.add(dashboardContentHistoryPanel, "historyPanelCard");
 
         dashboardContentSettingPanel.setBackground(new java.awt.Color(180, 234, 246));
+        dashboardContentSettingPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                dashboardContentSettingPanelComponentShown(evt);
+            }
+        });
 
         jLabel7.setText("Dashboard Setting");
 
         jLabel8.setText("Nama Warnet");
 
-        jTextField4.setText("jTextField4");
-
         jLabel9.setText("Alamat");
-
-        jTextField5.setText("jTextField5");
 
         jLabel10.setText("Biaya Per Jam");
 
-        jTextField6.setText("jTextField6");
+        settingCostPerHourTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingCostPerHourTextFieldActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Simpan");
 
@@ -426,11 +443,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(dashboardContentSettingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField4)
+                    .addComponent(settingWarnetNameTextField)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField5)
+                    .addComponent(settingWarnetAddressTextField)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField6)
+                    .addComponent(settingCostPerHourTextField)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
                 .addContainerGap(379, Short.MAX_VALUE))
         );
@@ -442,15 +459,15 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(settingWarnetNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(settingWarnetAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(settingCostPerHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(31, Short.MAX_VALUE))
@@ -625,7 +642,13 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
-        DefaultTableModel clientComputersTableModel = new DefaultTableModel();
+        DefaultTableModel clientComputersTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int i, int i1) {
+                return false; //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        
         clientComputersTableModel.addColumn("PC");
         clientComputersTableModel.addColumn("Username");
         clientComputersTableModel.addColumn("Tanggal");
@@ -640,20 +663,104 @@ public class MainWindow extends javax.swing.JFrame {
         for (Computer computer : computers) {
             clientComputersTableModel.addRow(new String[] {
                     computer.getName(), 
-                    computer.isActive() ? computer.getCurrentUsername() : "-", 
-                    computer.isActive() ? computer.getLastStart().toString() : "-", 
-                    computer.isActive() ? computer.getLastStart().toString() : "-", 
-                    computer.isActive() ? computer.getLastStart().toString() : "-", 
-                    computer.isActive() ? computer.getLastStart().toString() : "-",
-                    computer.isActive() ? "Aktif" : "Tidak aktif"
+                    getComputerCurrentUsername(computer), 
+                    getComputerLastStartDate(computer), 
+                    getComputerLastStartTime(computer), 
+                    getComputerActiveTime(computer), 
+                    getComputerCurrentTarif(computer),
+                    getComputerStatus(computer)
                 });
         }
         
         clientComputersTable.setModel(clientComputersTableModel);
     }//GEN-LAST:event_dashboardContentMonitorPanelComponentShown
 
-    
+    private void dashboardPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardPanelComponentShown
+        this.applicationState.getInternetCafeSettingsAction();
+    }//GEN-LAST:event_dashboardPanelComponentShown
 
+    private void settingCostPerHourTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingCostPerHourTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingCostPerHourTextFieldActionPerformed
+
+    private void dashboardContentSettingPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentSettingPanelComponentShown
+        settingWarnetNameTextField.setText(this.applicationState.getInternetCafeNameSetting().getStringValue());
+        settingWarnetAddressTextField.setText(this.applicationState.getInternetCafeAddressSetting().getStringValue());
+        settingCostPerHourTextField.setText(this.applicationState.getCostPerHourSetting().getDecimalValue().toString());
+    }//GEN-LAST:event_dashboardContentSettingPanelComponentShown
+    
+    private String getComputerCurrentUsername(Computer computer) {
+        return computer.isActive() ? computer.getCurrentUsername() : "-";
+    }
+    
+    private String getComputerLastStartDate(Computer computer) {
+        return computer.isActive() ? new SimpleDateFormat("dd-MM-yyyy").format(computer.getLastStart()) : "-";
+    }
+    
+    private String getComputerLastStartTime(Computer computer) {
+        return computer.isActive() ? new SimpleDateFormat("HH:mm").format(computer.getLastStart()) : "-";
+    }
+    
+    private String getComputerStatus(Computer computer) {
+        return computer.isActive() ? "Aktif" : "Tidak Aktif";
+    }
+    
+    private String getComputerActiveTime(Computer computer) {
+        
+        if (!computer.isActive()) {
+            return "-";
+        }
+        
+        Long differencesInMinutes = getComputerCurrentTimeAndLastStartTimeDifferencesInMinutes(computer);
+        Long differencesInSeconds = getComputerCurrentTimeAndLastStartTimeDifferencesInSeconds(computer);
+        
+        Long minutesRemainder = differencesInMinutes % 60;
+        Long hours = (differencesInMinutes - minutesRemainder) / 60;
+        
+        Long secondsRemainder = differencesInSeconds % 60;
+        
+        return hours.toString() + " : " + minutesRemainder.toString() + " : " + secondsRemainder.toString();
+    }
+    
+    private String getComputerCurrentTarif(Computer computer) {
+        if (!computer.isActive()) {
+            return "-";
+        }
+        
+        Setting costPerHourSetting = this.applicationState
+                .getCostPerHourSetting();
+        Setting costIncreasingPerMinuteSetting = this.applicationState
+                .getCostIncreasingPerMinuteSetting();
+        
+        
+        Long differences = getComputerCurrentTimeAndLastStartTimeDifferencesInMinutes(computer);
+        Long differencesRemainder = differences % new Long(costIncreasingPerMinuteSetting
+                .getIntegerValue());
+        Long timesOfPerMinute = (differences - differencesRemainder) / new Long(costIncreasingPerMinuteSetting
+                .getIntegerValue());
+        
+        Double costPerOneMinute = costPerHourSetting.getDecimalValue() / 60.0;
+        Double costPerMinutesSetting = costPerOneMinute * costIncreasingPerMinuteSetting
+                .getIntegerValue().doubleValue();
+        Double totalTarif = timesOfPerMinute * costPerMinutesSetting;
+        
+        return "Rp. " + new DecimalFormat("#0.00").format(totalTarif);
+    }
+    
+    private Long getComputerCurrentTimeAndLastStartTimeDifferencesInMinutes(Computer computer) {
+        Long startTimestamp = computer.getLastStart().getTime();
+        Long currentTimestamp = new Date().getTime();
+        Long differences = TimeUnit.MILLISECONDS.toMinutes(currentTimestamp - startTimestamp);
+        return differences;
+    }
+    
+    private Long getComputerCurrentTimeAndLastStartTimeDifferencesInSeconds(Computer computer) {
+        Long startTimestamp = computer.getLastStart().getTime();
+        Long currentTimestamp = new Date().getTime();
+        Long differences = TimeUnit.MILLISECONDS.toSeconds(currentTimestamp - startTimestamp);
+        return differences;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable clientComputersTable;
     private javax.swing.JPanel dashboardContentHistoryPanel;
@@ -690,9 +797,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel mainPanel;
@@ -700,6 +804,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPasswordField profilePasswordTextField;
     private javax.swing.JPasswordField profileRepeatPasswordTextField;
     private javax.swing.JTextField profileUsernameTextField;
+    private javax.swing.JTextField settingCostPerHourTextField;
+    private javax.swing.JTextField settingWarnetAddressTextField;
+    private javax.swing.JTextField settingWarnetNameTextField;
     private javax.swing.JPanel signInPanel;
     private javax.swing.JButton toHistoryPageButton;
     private javax.swing.JButton toMonitorClientPageButton;
