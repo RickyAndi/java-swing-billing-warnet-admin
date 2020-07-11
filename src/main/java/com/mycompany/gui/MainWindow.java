@@ -47,7 +47,6 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow(ApplicationState applicationState) {
 
         this.applicationState = applicationState;
-        
         initComponents();
         
         this.mainPanelCardLayout = (CardLayout) mainPanel.getLayout();
@@ -185,7 +184,6 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setText("Sign In");
 
         usernameTextField.setBackground(new java.awt.Color(245, 245, 245));
-        usernameTextField.setBorder(null);
 
         jLabel2.setText("Username");
 
@@ -194,7 +192,6 @@ public class MainWindow extends javax.swing.JFrame {
         loginButton.setBackground(new java.awt.Color(180, 234, 246));
         loginButton.setForeground(new java.awt.Color(67, 89, 96));
         loginButton.setText("Login");
-        loginButton.setBorder(null);
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
@@ -202,7 +199,6 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         passwordTextField.setBackground(new java.awt.Color(245, 245, 245));
-        passwordTextField.setBorder(null);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -965,6 +961,13 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         dashboardContentPanelCardLayout.show(dashboardContentPanel, "logoutPanelCard");
+        int selectedOption = JOptionPane.showConfirmDialog(null,
+        "Apakah Anda Yakin Akan Keluar?", "Logout", JOptionPane.YES_NO_OPTION);
+        if (selectedOption == JOptionPane.YES_OPTION) {
+            this.mainPanelCardLayout.show(mainPanel, "signinPanelCard");
+        }
+        
+    
     }//GEN-LAST:event_logoutButtonActionPerformed
     
     public void prepareClientComputersTableModelAndAddComputersData(List<Computer> computers) {
