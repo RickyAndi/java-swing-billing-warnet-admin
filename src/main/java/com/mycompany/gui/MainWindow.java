@@ -12,8 +12,13 @@ import com.mycompany.application.entities.Transaction;
 import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.CurrencyAbbrevationEnum;
 import com.mycompany.application.enums.ErrorMessageEnum;
+import com.mycompany.application.enums.MessageEnum;
+import com.mycompany.application.exceptions.OldPasswordDoesNotMatchException;
+import com.mycompany.application.exceptions.RepeatPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -125,17 +131,21 @@ public class MainWindow extends javax.swing.JFrame {
         settingWarnetAddressTextField = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         settingCostPerHourTextField = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
+        updateSettingButton = new javax.swing.JButton();
         dashboardContentProfilePanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         profileUsernameTextField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
+        profileUpdateProfileButton = new javax.swing.JButton();
         profilePasswordTextField = new javax.swing.JPasswordField();
         profileRepeatPasswordTextField = new javax.swing.JPasswordField();
+        jLabel25 = new javax.swing.JLabel();
+        profileOldPasswordTextField = new javax.swing.JPasswordField();
         dashboardContentLogoutPanel = new javax.swing.JPanel();
+        dashboardLoadingPanel = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -686,7 +696,12 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Simpan");
+        updateSettingButton.setText("Simpan");
+        updateSettingButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateSettingButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout dashboardContentSettingPanelLayout = new javax.swing.GroupLayout(dashboardContentSettingPanel);
         dashboardContentSettingPanel.setLayout(dashboardContentSettingPanelLayout);
@@ -702,7 +717,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(settingWarnetAddressTextField)
                     .addComponent(jLabel10)
                     .addComponent(settingCostPerHourTextField)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                    .addComponent(updateSettingButton, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
                 .addContainerGap(512, Short.MAX_VALUE))
         );
         dashboardContentSettingPanelLayout.setVerticalGroup(
@@ -723,7 +738,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(settingCostPerHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updateSettingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(93, Short.MAX_VALUE))
         );
 
@@ -744,11 +759,24 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel14.setText("Ulangi Password");
 
-        jButton8.setText("Simpan");
+        profileUpdateProfileButton.setText("Simpan");
+        profileUpdateProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                profileUpdateProfileButtonActionPerformed(evt);
+            }
+        });
 
         profilePasswordTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 profilePasswordTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel25.setText("Password lama");
+
+        profileOldPasswordTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                profileOldPasswordTextFieldActionPerformed(evt);
             }
         });
 
@@ -758,15 +786,18 @@ public class MainWindow extends javax.swing.JFrame {
             dashboardContentProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashboardContentProfilePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(dashboardContentProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12)
-                    .addComponent(profileUsernameTextField)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel14)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-                    .addComponent(profilePasswordTextField)
-                    .addComponent(profileRepeatPasswordTextField))
+                .addGroup(dashboardContentProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dashboardContentProfilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel11)
+                        .addComponent(jLabel12)
+                        .addComponent(profileUsernameTextField)
+                        .addComponent(jLabel25)
+                        .addComponent(jLabel14)
+                        .addComponent(profileUpdateProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                        .addComponent(profilePasswordTextField)
+                        .addComponent(profileRepeatPasswordTextField)
+                        .addComponent(profileOldPasswordTextField))
+                    .addComponent(jLabel13))
                 .addContainerGap(512, Short.MAX_VALUE))
         );
         dashboardContentProfilePanelLayout.setVerticalGroup(
@@ -778,17 +809,21 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profileUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(profileOldPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profilePasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profileRepeatPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addComponent(profileUpdateProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         dashboardContentPanel.add(dashboardContentProfilePanel, "profilePanelCard");
@@ -807,6 +842,29 @@ public class MainWindow extends javax.swing.JFrame {
         );
 
         dashboardContentPanel.add(dashboardContentLogoutPanel, "logoutPanelCard");
+
+        dashboardLoadingPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/images/loading-gear.gif"))); // NOI18N
+
+        javax.swing.GroupLayout dashboardLoadingPanelLayout = new javax.swing.GroupLayout(dashboardLoadingPanel);
+        dashboardLoadingPanel.setLayout(dashboardLoadingPanelLayout);
+        dashboardLoadingPanelLayout.setHorizontalGroup(
+            dashboardLoadingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardLoadingPanelLayout.createSequentialGroup()
+                .addGap(327, 327, 327)
+                .addComponent(jLabel24)
+                .addContainerGap(349, Short.MAX_VALUE))
+        );
+        dashboardLoadingPanelLayout.setVerticalGroup(
+            dashboardLoadingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardLoadingPanelLayout.createSequentialGroup()
+                .addGap(83, 83, 83)
+                .addComponent(jLabel24)
+                .addContainerGap(95, Short.MAX_VALUE))
+        );
+
+        dashboardContentPanel.add(dashboardLoadingPanel, "dashboardLoadingPanelCard");
 
         javax.swing.GroupLayout dashboardPanelLayout = new javax.swing.GroupLayout(dashboardPanel);
         dashboardPanel.setLayout(dashboardPanelLayout);
@@ -853,8 +911,22 @@ public class MainWindow extends javax.swing.JFrame {
             
             this.applicationState.loginAction(username, password);
             
-            this.mainPanelCardLayout.show(mainPanel, "dashboardPanelCard");
-            this.dashboardContentPanelCardLayout.show(dashboardContentPanel, "monitorClientPanelCard");
+            this.mainPanelCardLayout
+                    .show(mainPanel, "dashboardPanelCard");
+            this.dashboardContentPanelCardLayout
+                    .show(dashboardContentPanel, "dashboardLoadingPanelCard");
+            
+            MainWindow mainWindow = this;
+            Timer showClientComputersPage = new Timer(2000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mainWindow.dashboardContentPanelCardLayout
+                        .show(dashboardContentPanel, "monitorClientPanelCard");
+                }
+            });
+            showClientComputersPage.setRepeats(false);
+            showClientComputersPage.start();
+            
             
         } catch (UserDoesNotExistException exception) {
             JOptionPane.showMessageDialog(this, exception.getMessage());
@@ -1047,6 +1119,44 @@ public class MainWindow extends javax.swing.JFrame {
                     .setText(getTransactionStatus(selectedTransaction));
         }
     }//GEN-LAST:event_historyTableMouseClicked
+
+    private void updateSettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateSettingButtonActionPerformed
+        try {
+            String warnetName = settingWarnetNameTextField.getText();
+            String warnetAddress = settingWarnetAddressTextField.getText();
+            String pricePerHour = settingCostPerHourTextField.getText();
+            Double pricePerHourDouble = Double.parseDouble(pricePerHour);
+            applicationState
+                    .updateSettingsAction(warnetName, warnetAddress, pricePerHourDouble);
+            
+            JOptionPane.showMessageDialog(this, MessageEnum.UPDATE_SETTING_SUCCESS.message);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.GENERAL_UNKNOWN_ERROR.message);
+        }
+    }//GEN-LAST:event_updateSettingButtonActionPerformed
+
+    private void profileUpdateProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileUpdateProfileButtonActionPerformed
+        String username = profileUsernameTextField.getText();
+        String oldPassword = profileOldPasswordTextField.getText();
+        String newPassword = profilePasswordTextField.getText();
+        String repeatedNewPassword = profileRepeatPasswordTextField.getText();
+        
+        try {
+            applicationState
+                    .updateProfileAction(username, oldPassword, newPassword, repeatedNewPassword);
+            JOptionPane.showMessageDialog(this, MessageEnum.UPDATE_PROFILE_SUCCESS.message);
+        } catch (OldPasswordDoesNotMatchException e) {
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.OLD_PASSWORD_DOES_NOT_MATCH.message);
+        } catch (RepeatPasswordDoesNotMatchException e) {
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.NEW_PASSWORD_DOES_NOT_MATCH.message);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.GENERAL_UNKNOWN_ERROR.message);
+        }
+    }//GEN-LAST:event_profileUpdateProfileButtonActionPerformed
+
+    private void profileOldPasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileOldPasswordTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_profileOldPasswordTextFieldActionPerformed
     
     private String getTransactionAmountPaidByClient(Transaction transaction) {
         return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
@@ -1189,6 +1299,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel dashboardContentPanel;
     private javax.swing.JPanel dashboardContentProfilePanel;
     private javax.swing.JPanel dashboardContentSettingPanel;
+    private javax.swing.JPanel dashboardLoadingPanel;
     private javax.swing.JPanel dashboardPanel;
     private javax.swing.JPanel dashboardTabsPanel;
     private javax.swing.JPanel historyChangeTransactionStatusPanel;
@@ -1209,8 +1320,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel historyWarnetNameLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1227,6 +1336,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1246,8 +1357,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPasswordField passwordTextField;
+    private javax.swing.JPasswordField profileOldPasswordTextField;
     private javax.swing.JPasswordField profilePasswordTextField;
     private javax.swing.JPasswordField profileRepeatPasswordTextField;
+    private javax.swing.JButton profileUpdateProfileButton;
     private javax.swing.JTextField profileUsernameTextField;
     private javax.swing.JTextField settingCostPerHourTextField;
     private javax.swing.JTextField settingWarnetAddressTextField;
@@ -1257,6 +1370,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton toMonitorClientPageButton;
     private javax.swing.JButton toProfilePageButton;
     private javax.swing.JButton toSettingPageButton;
+    private javax.swing.JButton updateSettingButton;
     private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }

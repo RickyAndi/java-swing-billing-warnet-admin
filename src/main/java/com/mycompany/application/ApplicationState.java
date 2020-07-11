@@ -12,11 +12,14 @@ import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.enums.SettingNameEnum;
 import com.mycompany.application.enums.TransactionStatusEnum;
+import com.mycompany.application.exceptions.OldPasswordDoesNotMatchException;
+import com.mycompany.application.exceptions.RepeatPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
 import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.SettingRepository;
 import com.mycompany.application.repositories.TransactionRepository;
 import com.mycompany.application.repositories.UserRepository;
+import org.hibernate.Session;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
@@ -29,6 +32,8 @@ import java.util.Optional;
  * @author rickyandhi
  */
 public class ApplicationState {
+
+    private Session session;
 
     private Optional<User> currentUser = Optional.empty();
 
@@ -47,12 +52,14 @@ public class ApplicationState {
     private TransactionRepository transactionRepository;
 
     public ApplicationState(
+            Session session,
             UserRepository userRepository,
             ComputerRepository computerRepository,
             SettingRepository settingRepository,
             TransactionRepository transactionRepository
     ) {
 
+        this.session = session;
         this.userRepository = userRepository;
         this.computerRepository = computerRepository;
         this.settingRepository = settingRepository;
@@ -102,6 +109,66 @@ public class ApplicationState {
         List<Transaction> transactions = this.transactionRepository
                 .getTransactionsByStatusNot(TransactionStatusEnum.ACTIVE.value);
         setTransactions(transactions);
+    }
+
+    public void updateSettingsAction(String warnetName, String warnetAddress, Double pricePerHour) {
+        org.hibernate.Transaction transaction = session.beginTransaction();
+
+        Setting warnetNameSetting = settingRepository
+                .updateStringValue(getInternetCafeNameSetting(), warnetName);
+        setInternetCafeNameSetting(warnetNameSetting);
+        Setting warnetAddressSetting = settingRepository
+                .updateStringValue(getInternetCafeAddressSetting(), warnetAddress);
+        setInternetCafeAddressSetting(warnetAddressSetting);
+        Setting pricePerHourSetting = settingRepository
+                .updateDecimalValue(getCostPerHourSetting(), pricePerHour);
+
+        setCostPerHourSetting(pricePerHourSetting);
+
+        transaction.commit();
+    }
+
+    public void updateProfileAction(
+            String username,
+            String oldPassword,
+            String newPassword,
+            String repeatNewPassword
+    ) throws NoSuchAlgorithmException, OldPasswordDoesNotMatchException, RepeatPasswordDoesNotMatchException {
+        Optional<User> optionalCurrentUser = getCurrentUser();
+        if (optionalCurrentUser.isPresent()) {
+
+            User user = optionalCurrentUser.get();
+            org.hibernate.Transaction transaction = session
+                    .beginTransaction();
+            userRepository
+                    .updateUsername(user, username);
+            transaction.commit();
+
+            if (isUserChangingItsPassword(newPassword)) {
+                String hashedOldPasswordOfUser = user.getPassword();
+                String hashedOldPassword = turnPasswordToHash(oldPassword);
+                if (!hashedOldPasswordOfUser.equals(hashedOldPassword)) {
+                    throw new OldPasswordDoesNotMatchException(ErrorMessageEnum.OLD_PASSWORD_DOES_NOT_MATCH.message);
+                }
+
+                if (!newPassword.equals(repeatNewPassword)) {
+                    throw new RepeatPasswordDoesNotMatchException(ErrorMessageEnum.NEW_PASSWORD_DOES_NOT_MATCH.message);
+                }
+
+                org.hibernate.Transaction changePasswordTransaction = session
+                        .beginTransaction();
+                String hashedNewPassword = turnPasswordToHash(newPassword);
+                userRepository
+                        .updatePassword(user, hashedNewPassword);
+                changePasswordTransaction.commit();
+            }
+
+            setCurrentUser(Optional.of(user));
+        }
+    }
+
+    private Boolean isUserChangingItsPassword(String password) {
+        return !password.equals("");
     }
 
     private String turnPasswordToHash(String plainPassword) throws NoSuchAlgorithmException {

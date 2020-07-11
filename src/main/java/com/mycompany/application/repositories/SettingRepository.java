@@ -19,4 +19,37 @@ public class SettingRepository {
 
         return Optional.ofNullable((Setting) query.uniqueResult());
     }
+
+    public Setting updateIntegerValue(Setting setting, Integer integerValue) {
+
+        setting.setIntegerValue(integerValue);
+        setting.setDecimalValue(null);
+        setting.setStringValue(null);
+
+        session.update(setting);
+
+        return setting;
+    }
+
+    public Setting updateStringValue(Setting setting, String stringValue) {
+
+        setting.setIntegerValue(null);
+        setting.setDecimalValue(null);
+        setting.setStringValue(stringValue);
+
+        session.update(setting);
+
+        return setting;
+    }
+
+    public Setting updateDecimalValue(Setting setting, Double decimalValue) {
+
+        setting.setIntegerValue(null);
+        setting.setDecimalValue(decimalValue);
+        setting.setStringValue(null);
+
+        session.update(setting);
+
+        return setting;
+    }
 }

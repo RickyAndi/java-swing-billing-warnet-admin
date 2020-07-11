@@ -20,4 +20,14 @@ public class UserRepository {
 
         return Optional.ofNullable((User) query.uniqueResult());
     }
+
+    public void updateUsername(User user, String username) {
+        user.setUsername(username);
+        session.update(user);
+    }
+
+    public void updatePassword(User user, String hashedPassword) {
+        user.setPassword(hashedPassword);
+        session.update(user);
+    }
 }

@@ -1039,7 +1039,7 @@
                                   <Component id="settingWarnetAddressTextField" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="settingCostPerHourTextField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton7" pref="352" max="32767" attributes="0"/>
+                                  <Component id="updateSettingButton" pref="352" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="512" max="32767" attributes="0"/>
                           </Group>
@@ -1063,7 +1063,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="settingCostPerHourTextField" min="-2" pref="28" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton7" min="-2" pref="33" max="-2" attributes="0"/>
+                              <Component id="updateSettingButton" min="-2" pref="33" max="-2" attributes="0"/>
                               <EmptySpace pref="93" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -1099,10 +1099,13 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingCostPerHourTextFieldActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton7">
+                    <Component class="javax.swing.JButton" name="updateSettingButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Simpan"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateSettingButtonActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1126,15 +1129,19 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="profileUsernameTextField" alignment="0" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="profileUsernameTextField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="profileUpdateProfileButton" pref="352" max="32767" attributes="0"/>
+                                      <Component id="profilePasswordTextField" max="32767" attributes="0"/>
+                                      <Component id="profileRepeatPasswordTextField" max="32767" attributes="0"/>
+                                      <Component id="profileOldPasswordTextField" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
                                   <Component id="jLabel13" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton8" pref="352" max="32767" attributes="0"/>
-                                  <Component id="profilePasswordTextField" max="32767" attributes="0"/>
-                                  <Component id="profileRepeatPasswordTextField" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace pref="512" max="32767" attributes="0"/>
                           </Group>
@@ -1149,17 +1156,21 @@
                               <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="profileUsernameTextField" min="-2" pref="29" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="profileOldPasswordTextField" min="-2" pref="31" max="-2" attributes="0"/>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="profilePasswordTextField" min="-2" pref="31" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="profileRepeatPasswordTextField" min="-2" pref="30" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton8" min="-2" pref="33" max="-2" attributes="0"/>
-                              <EmptySpace pref="89" max="32767" attributes="0"/>
+                              <Component id="profileUpdateProfileButton" min="-2" pref="33" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1187,10 +1198,13 @@
                         <Property name="text" type="java.lang.String" value="Ulangi Password"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton8">
+                    <Component class="javax.swing.JButton" name="profileUpdateProfileButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Simpan"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="profileUpdateProfileButtonActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JPasswordField" name="profilePasswordTextField">
                       <Events>
@@ -1198,6 +1212,16 @@
                       </Events>
                     </Component>
                     <Component class="javax.swing.JPasswordField" name="profileRepeatPasswordTextField">
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel25">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Password lama"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JPasswordField" name="profileOldPasswordTextField">
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="profileOldPasswordTextFieldActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1225,6 +1249,48 @@
                       </Group>
                     </DimensionLayout>
                   </Layout>
+                </Container>
+                <Container class="javax.swing.JPanel" name="dashboardLoadingPanel">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                      <CardConstraints cardName="dashboardLoadingPanelCard"/>
+                    </Constraint>
+                  </Constraints>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="327" max="-2" attributes="0"/>
+                              <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="349" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
+                              <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="95" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                  <SubComponents>
+                    <Component class="javax.swing.JLabel" name="jLabel24">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/assets/images/loading-gear.gif"/>
+                        </Property>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
                 </Container>
               </SubComponents>
             </Container>

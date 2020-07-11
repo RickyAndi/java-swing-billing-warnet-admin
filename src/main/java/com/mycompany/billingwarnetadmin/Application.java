@@ -39,6 +39,7 @@ public class Application {
         TransactionRepository transactionRepository = new TransactionRepository(session);
 
         ApplicationState applicationState = new ApplicationState(
+                session,
                 userRepository,
                 computerRepository,
                 settingRepository,

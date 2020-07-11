@@ -61,4 +61,16 @@ public class Setting {
     public Integer getIntegerValue() {
         return integerValue;
     }
+
+    public void setStringValue(String stringValue) {
+        this.stringValue = stringValue;
+    }
+
+    public void setDecimalValue(Double decimalValue) {
+        this.decimalValue = decimalValue;
+    }
+
+    public void setIntegerValue(Integer integerValue) {
+        this.integerValue = integerValue;
+    }
 }
