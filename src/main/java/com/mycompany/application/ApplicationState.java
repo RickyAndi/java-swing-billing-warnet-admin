@@ -21,10 +21,14 @@ import com.mycompany.application.repositories.SettingRepository;
 import com.mycompany.application.repositories.TransactionRepository;
 import com.mycompany.application.repositories.UserRepository;
 import org.hibernate.Session;
+import org.joda.time.DateTime;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,9 +110,35 @@ public class ApplicationState {
         );
     }
 
-    public void getTransactionsAction() {
+    public void getTransactionsAction(
+            Optional<String> optionalDate,
+            Optional<String> optionalUsername
+    ) throws Exception {
+
+        List<Integer> statuses = Arrays.asList(
+            TransactionStatusEnum.NOT_PAID.value,
+            TransactionStatusEnum.PAID.value
+        );
+
+        Date startDate = null;
+        Date endDate = null;
+
+        if (optionalDate.isPresent()) {
+            SimpleDateFormat startDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            startDate = startDateFormat.parse(optionalDate.get());
+            endDate = new DateTime(startDate).plusDays(1).toDate();
+        } else {
+            startDate = new Date();
+            endDate = new DateTime(startDate).plusDays(1).toDate();
+        }
+
         List<Transaction> transactions = this.transactionRepository
-                .getTransactionsByStatusNot(TransactionStatusEnum.ACTIVE.value);
+            .getTransactions(
+                statuses,
+                optionalUsername,
+                Optional.of(startDate),
+                Optional.of(endDate)
+        );
         setTransactions(transactions);
     }
 

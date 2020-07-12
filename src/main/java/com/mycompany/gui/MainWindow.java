@@ -94,8 +94,8 @@ public class MainWindow extends javax.swing.JFrame {
         clientComputersTable = new javax.swing.JTable();
         dashboardContentHistoryPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
+        searchHistoryTransactionButton = new javax.swing.JButton();
+        historyUsernameFilterTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         historyTable = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
@@ -125,7 +125,7 @@ public class MainWindow extends javax.swing.JFrame {
         historyTransactionPaidAmountByClientLabel = new javax.swing.JLabel();
         historyTransactionChangeLabel = new javax.swing.JLabel();
         historyTransactionStatusLabel = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        historyDateFilterTextField = new javax.swing.JTextField();
         dashboardContentSettingPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -382,11 +382,17 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel5.setText("Data History Client");
 
-        jButton6.setText("Cari");
-
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        searchHistoryTransactionButton.setText("Cari");
+        searchHistoryTransactionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                searchHistoryTransactionButtonActionPerformed(evt);
+            }
+        });
+
+        historyUsernameFilterTextField.setToolTipText("Username");
+        historyUsernameFilterTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historyUsernameFilterTextFieldActionPerformed(evt);
             }
         });
 
@@ -636,6 +642,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(historyChangeTransactionStatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        historyDateFilterTextField.setToolTipText("Tanggal");
+
         javax.swing.GroupLayout dashboardContentHistoryPanelLayout = new javax.swing.GroupLayout(dashboardContentHistoryPanel);
         dashboardContentHistoryPanel.setLayout(dashboardContentHistoryPanelLayout);
         dashboardContentHistoryPanelLayout.setHorizontalGroup(
@@ -649,11 +657,11 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardContentHistoryPanelLayout.createSequentialGroup()
                         .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
-                                .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                                .addComponent(searchHistoryTransactionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(historyDateFilterTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(historyUsernameFilterTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -672,9 +680,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dashboardContentHistoryPanelLayout.createSequentialGroup()
                         .addGroup(dashboardContentHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField1))
+                            .addComponent(searchHistoryTransactionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                            .addComponent(historyUsernameFilterTextField)
+                            .addComponent(historyDateFilterTextField))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1123,14 +1131,29 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardContentHistoryPanelComponentShown
     
     private void addDataToHistoryTable() {
-        this.applicationState.getTransactionsAction();
-        List<Transaction> transactions = applicationState.getTransactions();
-        this.prepareHistoryTableModelAndAddHistoryTransactionsData(transactions);
+        try {
+            Optional<String> optionalDate = Optional.empty();
+            Optional<String> optionalUsername = Optional.empty();
+            
+            if (!historyDateFilterTextField.getText().equals("")) {
+                optionalDate = Optional.of(historyDateFilterTextField.getText());
+            }
+            
+            if (!historyUsernameFilterTextField.getText().equals("")) {
+                optionalUsername = Optional.of(historyUsernameFilterTextField.getText());
+            }
+            
+            this.applicationState.getTransactionsAction(optionalDate, optionalUsername);
+            List<Transaction> transactions = applicationState.getTransactions();
+            this.prepareHistoryTableModelAndAddHistoryTransactionsData(transactions);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
     
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void historyUsernameFilterTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyUsernameFilterTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_historyUsernameFilterTextFieldActionPerformed
 
     private void historyTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_historyTableMouseClicked
         Integer rowNumber = historyTable.rowAtPoint(evt.getPoint());
@@ -1241,6 +1264,10 @@ public class MainWindow extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ErrorMessageEnum.GENERAL_UNKNOWN_ERROR.message);
         }
     }//GEN-LAST:event_historyTransactionPayButtonActionPerformed
+
+    private void searchHistoryTransactionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchHistoryTransactionButtonActionPerformed
+        this.addDataToHistoryTable();
+    }//GEN-LAST:event_searchHistoryTransactionButtonActionPerformed
     
     private String getTransactionAmountPaidByClient(Transaction transaction) {
         return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
@@ -1383,6 +1410,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel dashboardPanel;
     private javax.swing.JPanel dashboardTabsPanel;
     private javax.swing.JPanel historyChangeTransactionStatusPanel;
+    private javax.swing.JTextField historyDateFilterTextField;
     private javax.swing.JPanel historyNotPaidTransactionPanel;
     private javax.swing.JPanel historyPaidTransactionPanelCard;
     private javax.swing.JTable historyTable;
@@ -1396,10 +1424,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel historyTransactionTanggalLabel;
     private javax.swing.JLabel historyTransactionTariffLabel;
     private javax.swing.JLabel historyTransactionUsernameLabel;
+    private javax.swing.JTextField historyUsernameFilterTextField;
     private javax.swing.JLabel historyWarnetAddressLabel;
     private javax.swing.JLabel historyWarnetNameLabel;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1431,8 +1459,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel mainPanel;
@@ -1442,6 +1468,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPasswordField profileRepeatPasswordTextField;
     private javax.swing.JButton profileUpdateProfileButton;
     private javax.swing.JTextField profileUsernameTextField;
+    private javax.swing.JButton searchHistoryTransactionButton;
     private javax.swing.JTextField settingCostPerHourTextField;
     private javax.swing.JTextField settingWarnetAddressTextField;
     private javax.swing.JTextField settingWarnetNameTextField;

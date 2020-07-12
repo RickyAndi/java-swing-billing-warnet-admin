@@ -479,11 +479,11 @@
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <Component id="jButton6" pref="184" max="32767" attributes="0"/>
+                                              <Component id="searchHistoryTransactionButton" pref="184" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField1" min="-2" pref="216" max="-2" attributes="0"/>
+                                              <Component id="historyDateFilterTextField" min="-2" pref="216" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField3" min="-2" pref="188" max="-2" attributes="0"/>
+                                              <Component id="historyUsernameFilterTextField" min="-2" pref="188" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jScrollPane1" max="32767" attributes="0"/>
                                       </Group>
@@ -510,9 +510,9 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jButton6" pref="31" max="32767" attributes="0"/>
-                                          <Component id="jTextField3" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTextField1" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="searchHistoryTransactionButton" pref="31" max="32767" attributes="0"/>
+                                          <Component id="historyUsernameFilterTextField" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="historyDateFilterTextField" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
@@ -530,14 +530,20 @@
                         <Property name="text" type="java.lang.String" value="Data History Client"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton6">
+                    <Component class="javax.swing.JButton" name="searchHistoryTransactionButton">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Cari"/>
                       </Properties>
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="jTextField3">
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField3ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchHistoryTransactionButtonActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="historyUsernameFilterTextField">
+                      <Properties>
+                        <Property name="toolTipText" type="java.lang.String" value="Username"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="historyUsernameFilterTextFieldActionPerformed"/>
                       </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -1002,7 +1008,10 @@
                         </Container>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JTextField" name="jTextField1">
+                    <Component class="javax.swing.JTextField" name="historyDateFilterTextField">
+                      <Properties>
+                        <Property name="toolTipText" type="java.lang.String" value="Tanggal"/>
+                      </Properties>
                     </Component>
                   </SubComponents>
                 </Container>
