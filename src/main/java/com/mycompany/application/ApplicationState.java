@@ -12,6 +12,7 @@ import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.enums.SettingNameEnum;
 import com.mycompany.application.enums.TransactionStatusEnum;
+import com.mycompany.application.exceptions.AmountPaidByClientIsNotEnoughException;
 import com.mycompany.application.exceptions.OldPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.RepeatPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
@@ -165,6 +166,27 @@ public class ApplicationState {
 
             setCurrentUser(Optional.of(user));
         }
+    }
+
+    public void updateSelectedTransactionStatusToPaidAction(Double paidAmountByClient) throws AmountPaidByClientIsNotEnoughException {
+        Optional<Transaction> optionalSelectedTransaction = getSelectedTransaction();
+        Transaction selectedTransaction = optionalSelectedTransaction.get();
+
+        if (selectedTransaction.getAmountToBePaid() > paidAmountByClient) {
+            throw new AmountPaidByClientIsNotEnoughException(
+                    ErrorMessageEnum.AMOUNT_PAID_BY_CLIENT_IS_NOT_ENOUGH.message
+            );
+        }
+
+        Double changeAmount = paidAmountByClient - selectedTransaction.getAmountToBePaid();
+
+        org.hibernate.Transaction changeTransactionStatusTransaction = session.beginTransaction();
+        transactionRepository
+                .changeTransactionStatusToPaid(selectedTransaction, paidAmountByClient, changeAmount);
+
+        changeTransactionStatusTransaction.commit();
+
+        setSelectedTransaction(Optional.of(selectedTransaction));
     }
 
     private Boolean isUserChangingItsPassword(String password) {

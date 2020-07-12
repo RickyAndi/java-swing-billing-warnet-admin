@@ -28,6 +28,9 @@ public class Computer {
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "current_price_per_hour")
+    private Double currentPricePerHour;
+
     public Integer getId() {
         return id;
     }
@@ -70,5 +73,13 @@ public class Computer {
 
     public Boolean isActive() {
         return this.getStatus().equals(ComputerStatusEnum.ACTIVE.value);
+    }
+
+    public void setCurrentPricePerHour(Double currentPricePerHour) {
+        this.currentPricePerHour = currentPricePerHour;
+    }
+
+    public Double getCurrentPricePerHour() {
+        return currentPricePerHour;
     }
 }

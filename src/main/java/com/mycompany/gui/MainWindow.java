@@ -13,6 +13,7 @@ import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.CurrencyAbbrevationEnum;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.enums.MessageEnum;
+import com.mycompany.application.exceptions.AmountPaidByClientIsNotEnoughException;
 import com.mycompany.application.exceptions.OldPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.RepeatPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.UserDoesNotExistException;
@@ -41,6 +42,9 @@ public class MainWindow extends javax.swing.JFrame {
     private CardLayout mainPanelCardLayout;
     private CardLayout dashboardContentPanelCardLayout;
     private CardLayout historyChangeTransactionStatusPanelCardLayout;
+    
+    private Optional<Timer> clientComputersActiveTimeAnimation = Optional.empty();
+    
     /**
      * Creates new form MainWindow
      */
@@ -111,7 +115,7 @@ public class MainWindow extends javax.swing.JFrame {
         historyChangeTransactionStatusPanel = new javax.swing.JPanel();
         historyNotPaidTransactionPanel = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
-        historyTransactionAmountPaidByClient = new javax.swing.JTextField();
+        historyTransactionAmountPaidByClientTextField = new javax.swing.JTextField();
         historyTransactionPayButton = new javax.swing.JButton();
         historyPaidTransactionPanelCard = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
@@ -307,6 +311,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         dashboardContentMonitorPanel.setBackground(new java.awt.Color(180, 234, 246));
         dashboardContentMonitorPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                dashboardContentMonitorPanelComponentHidden(evt);
+            }
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 dashboardContentMonitorPanelComponentShown(evt);
             }
@@ -449,6 +456,11 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel26.setText("Bayar");
 
         historyTransactionPayButton.setText("Bayar");
+        historyTransactionPayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historyTransactionPayButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout historyNotPaidTransactionPanelLayout = new javax.swing.GroupLayout(historyNotPaidTransactionPanel);
         historyNotPaidTransactionPanel.setLayout(historyNotPaidTransactionPanelLayout);
@@ -461,7 +473,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(historyNotPaidTransactionPanelLayout.createSequentialGroup()
                         .addComponent(jLabel26)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                        .addComponent(historyTransactionAmountPaidByClient, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(historyTransactionAmountPaidByClientTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         historyNotPaidTransactionPanelLayout.setVerticalGroup(
@@ -469,7 +481,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(historyNotPaidTransactionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(historyNotPaidTransactionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(historyTransactionAmountPaidByClient, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(historyTransactionAmountPaidByClientTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel26))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(historyTransactionPayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -944,7 +956,8 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardContentProfilePanelComponentShown
 
     private void toMonitorClientPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toMonitorClientPageButtonActionPerformed
-        dashboardContentPanelCardLayout.show(dashboardContentPanel, "monitorClientPanelCard");
+        dashboardContentPanelCardLayout
+                .show(dashboardContentPanel, "monitorClientPanelCard");
     }//GEN-LAST:event_toMonitorClientPageButtonActionPerformed
 
     private void toHistoryPageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toHistoryPageButtonActionPerformed
@@ -1001,10 +1014,43 @@ public class MainWindow extends javax.swing.JFrame {
         clientComputersTable.setModel(clientComputersTableModel);
     }
     
+    public void animateClienComputersTableActiveTime() {
+        MainWindow mainWindow = this;
+        Timer activeTimeAnimation = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                DefaultTableModel clientComputersTableModel = 
+                        (DefaultTableModel) mainWindow.clientComputersTable
+                            .getModel();
+                
+                Integer rowNumber = 0;
+
+                List<Computer> computers = applicationState.getClientComputers();
+                for (Computer computer : computers) {
+                    String computerActiveTime = mainWindow
+                            .getComputerActiveTime(computer);
+                    String computerCurrentTariff = mainWindow
+                            .getComputerCurrentTarif(computer);
+                    clientComputersTableModel
+                            .setValueAt(computerActiveTime, rowNumber, 4);
+                    clientComputersTableModel
+                            .setValueAt(computerCurrentTariff, rowNumber, 5);
+                    rowNumber++;
+                }
+                
+                clientComputersTableModel.fireTableDataChanged();
+            }
+        });
+        activeTimeAnimation.start();
+        clientComputersActiveTimeAnimation = Optional.of(activeTimeAnimation);
+    }
+    
     private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
         applicationState.getClientComputersAction();
         List<Computer> computers = applicationState.getClientComputers();
         prepareClientComputersTableModelAndAddComputersData(computers);
+        animateClienComputersTableActiveTime();
     }//GEN-LAST:event_dashboardContentMonitorPanelComponentShown
 
     private void dashboardPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardPanelComponentShown
@@ -1073,11 +1119,15 @@ public class MainWindow extends javax.swing.JFrame {
                         .getStringValue()
                 );
   
+        addDataToHistoryTable();
+    }//GEN-LAST:event_dashboardContentHistoryPanelComponentShown
+    
+    private void addDataToHistoryTable() {
         this.applicationState.getTransactionsAction();
         List<Transaction> transactions = applicationState.getTransactions();
         this.prepareHistoryTableModelAndAddHistoryTransactionsData(transactions);
-    }//GEN-LAST:event_dashboardContentHistoryPanelComponentShown
-
+    }
+    
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
@@ -1096,8 +1146,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .orElse(null);
         
         applicationState.setSelectedTransaction(Optional.of(selectedTransaction));
-        
-        historyTransactionTanggalLabel
+        setViewOfHistoryTransactionPanel(selectedTransaction);
+    }//GEN-LAST:event_historyTableMouseClicked
+    
+    private void setViewOfHistoryTransactionPanel(Transaction selectedTransaction) {
+         historyTransactionTanggalLabel
                 .setText(getTransactionStartOnDate(selectedTransaction));
         historyTransactionNumberLabel
                 .setText(getTransactionNumber(selectedTransaction));
@@ -1121,8 +1174,8 @@ public class MainWindow extends javax.swing.JFrame {
             historyTransactionStatusLabel
                     .setText(getTransactionStatus(selectedTransaction));
         }
-    }//GEN-LAST:event_historyTableMouseClicked
-
+    }
+    
     private void updateSettingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateSettingButtonActionPerformed
         try {
             String warnetName = settingWarnetNameTextField.getText();
@@ -1160,6 +1213,34 @@ public class MainWindow extends javax.swing.JFrame {
     private void profileOldPasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileOldPasswordTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_profileOldPasswordTextFieldActionPerformed
+
+    private void dashboardContentMonitorPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentHidden
+        if (clientComputersActiveTimeAnimation.isPresent()) {
+            clientComputersActiveTimeAnimation.get().stop();
+        }
+    }//GEN-LAST:event_dashboardContentMonitorPanelComponentHidden
+
+    private void historyTransactionPayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyTransactionPayButtonActionPerformed
+        try {
+            String amountPaidByClient = historyTransactionAmountPaidByClientTextField
+                .getText();
+            Double amountPaidByClientDouble = Double.parseDouble(amountPaidByClient);
+            applicationState.updateSelectedTransactionStatusToPaidAction(amountPaidByClientDouble);
+            Optional<Transaction> optionalTransaction = applicationState.getSelectedTransaction();
+            
+            setViewOfHistoryTransactionPanel(optionalTransaction.get());
+            historyTransactionAmountPaidByClientTextField.setText("");
+            addDataToHistoryTable();
+            JOptionPane.showMessageDialog(this, MessageEnum.UPDATE_TRANSACTION_SUCCESS.message);
+            
+        } catch (AmountPaidByClientIsNotEnoughException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.PAID_AMOUNT_IS_NOT_NUMBER.message);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, ErrorMessageEnum.GENERAL_UNKNOWN_ERROR.message);
+        }
+    }//GEN-LAST:event_historyTransactionPayButtonActionPerformed
     
     private String getTransactionAmountPaidByClient(Transaction transaction) {
         return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
@@ -1257,19 +1338,15 @@ public class MainWindow extends javax.swing.JFrame {
             return "-";
         }
         
-        Setting costPerHourSetting = this.applicationState
-                .getCostPerHourSetting();
         Setting costIncreasingPerMinuteSetting = this.applicationState
                 .getCostIncreasingPerMinuteSetting();
-        
-        
         Long differences = getComputerCurrentTimeAndLastStartTimeDifferencesInMinutes(computer);
         Long differencesRemainder = differences % new Long(costIncreasingPerMinuteSetting
                 .getIntegerValue());
         Long timesOfPerMinute = (differences - differencesRemainder) / new Long(costIncreasingPerMinuteSetting
                 .getIntegerValue());
         
-        Double costPerOneMinute = costPerHourSetting.getDecimalValue() / 60.0;
+        Double costPerOneMinute = computer.getCurrentPricePerHour() / 60.0;
         Double costPerMinutesSetting = costPerOneMinute * costIncreasingPerMinuteSetting
                 .getIntegerValue().doubleValue();
         Double totalTarif = timesOfPerMinute * costPerMinutesSetting;
@@ -1309,7 +1386,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel historyNotPaidTransactionPanel;
     private javax.swing.JPanel historyPaidTransactionPanelCard;
     private javax.swing.JTable historyTable;
-    private javax.swing.JTextField historyTransactionAmountPaidByClient;
+    private javax.swing.JTextField historyTransactionAmountPaidByClientTextField;
     private javax.swing.JLabel historyTransactionChangeLabel;
     private javax.swing.JLabel historyTransactionNumberLabel;
     private javax.swing.JLabel historyTransactionPaidAmountByClientLabel;
