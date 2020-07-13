@@ -23,7 +23,9 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +33,12 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -121,7 +129,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        historyPrintButton = new javax.swing.JButton();
         historyTransactionPaidAmountByClientLabel = new javax.swing.JLabel();
         historyTransactionChangeLabel = new javax.swing.JLabel();
         historyTransactionStatusLabel = new javax.swing.JLabel();
@@ -507,7 +515,12 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel23.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jLabel23.setText("Keterangan");
 
-        jButton1.setText("Cetak");
+        historyPrintButton.setText("Cetak");
+        historyPrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historyPrintButtonActionPerformed(evt);
+            }
+        });
 
         historyTransactionPaidAmountByClientLabel.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         historyTransactionPaidAmountByClientLabel.setText("-");
@@ -525,7 +538,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(historyPrintButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(historyPaidTransactionPanelCardLayout.createSequentialGroup()
                         .addGroup(historyPaidTransactionPanelCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
@@ -558,7 +571,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jLabel23)
                     .addComponent(historyTransactionStatusLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(historyPrintButton, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1268,6 +1281,46 @@ public class MainWindow extends javax.swing.JFrame {
     private void searchHistoryTransactionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchHistoryTransactionButtonActionPerformed
         this.addDataToHistoryTable();
     }//GEN-LAST:event_searchHistoryTransactionButtonActionPerformed
+
+    private void historyPrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyPrintButtonActionPerformed
+        
+        Optional<Transaction> optionalSelectedTransaction = applicationState
+                .getSelectedTransaction();
+        Transaction selectedTransaction = optionalSelectedTransaction.get();
+        
+        String rootDirectory = System.getProperty("user.dir");
+        
+        HashMap param = new HashMap();
+        param.put("warnet_name", applicationState
+                .getInternetCafeNameSetting().getStringValue()
+        );
+        param.put("warnet_address", applicationState
+                .getInternetCafeAddressSetting().getStringValue()
+        );
+        
+        param.put("date", getTransactionStartOnDate(selectedTransaction));
+        param.put("time", getTransactionStartOnTime(selectedTransaction));
+        param.put("total_time", getTransactionDuration(selectedTransaction));
+        param.put("pc_name", selectedTransaction.getComputer().getName());
+        param.put("username", selectedTransaction.getUsername());
+        param.put("amount_to_be_paid", getTransactionTariff(selectedTransaction));
+        param.put("amount_paid", getTransactionAmountPaidByClient(selectedTransaction));
+        param.put("amount_change", getTransactionChangeAmount(selectedTransaction));
+        
+        ArrayList<String> empty = new ArrayList<String>();
+        empty.add(".");
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(empty);
+        
+        try {
+            JasperReport jspr = JasperCompileManager
+                    .compileReport(rootDirectory + "/src/main/resources/jasper/history_transaction_3.jrxml");
+            JasperPrint jasperPrint = JasperFillManager
+                .fillReport(jspr, param, ds);
+            JasperViewer.viewReport(jasperPrint, false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }  
+    }//GEN-LAST:event_historyPrintButtonActionPerformed
     
     private String getTransactionAmountPaidByClient(Transaction transaction) {
         return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
@@ -1413,6 +1466,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField historyDateFilterTextField;
     private javax.swing.JPanel historyNotPaidTransactionPanel;
     private javax.swing.JPanel historyPaidTransactionPanelCard;
+    private javax.swing.JButton historyPrintButton;
     private javax.swing.JTable historyTable;
     private javax.swing.JTextField historyTransactionAmountPaidByClientTextField;
     private javax.swing.JLabel historyTransactionChangeLabel;
@@ -1427,7 +1481,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField historyUsernameFilterTextField;
     private javax.swing.JLabel historyWarnetAddressLabel;
     private javax.swing.JLabel historyWarnetNameLabel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
