@@ -85,7 +85,8 @@ public class ApplicationState {
     }
 
     public void getClientComputersAction() {
-        clientComputers = this.computerRepository.getComputers();
+        List<Computer> computers = this.computerRepository.getComputers();
+        clientComputers = computers;
     }
 
     public void getInternetCafeSettingsAction() {
@@ -128,8 +129,10 @@ public class ApplicationState {
             startDate = startDateFormat.parse(optionalDate.get());
             endDate = new DateTime(startDate).plusDays(1).toDate();
         } else {
-            startDate = new Date();
+            startDate = new DateTime(new Date()).withTime(0,0,0,0).toDate();
             endDate = new DateTime(startDate).plusDays(1).toDate();
+            System.out.println(startDate);
+            System.out.println(endDate);
         }
 
         List<Transaction> transactions = this.transactionRepository

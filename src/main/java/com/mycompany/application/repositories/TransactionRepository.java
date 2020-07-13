@@ -1,10 +1,10 @@
 package com.mycompany.application.repositories;
 
+import com.mycompany.application.entities.Computer;
 import com.mycompany.application.entities.Transaction;
 import com.mycompany.application.enums.TransactionStatusEnum;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -60,7 +60,8 @@ public class TransactionRepository {
                 .where(criteria.and(predicates.toArray(new Predicate[predicates.size()])));
 
         Query<Transaction> transactionQuery = session.createQuery(transactionCriteriaQuery);
-        return transactionQuery.getResultList();
+        List<Transaction> transactions = transactionQuery.getResultList();
+        return transactions;
     }
 
     public List<Transaction> getTransactionsByStatusNot(Integer status) {
@@ -79,7 +80,24 @@ public class TransactionRepository {
         transaction.setAmountPaidByClient(amountPaidByClient);
         transaction.setStatus(TransactionStatusEnum.PAID.value);
         session.update(transaction);
-
         return transaction;
+    }
+
+    public Transaction createTransaction(Computer computer, String username, Date startOn, Integer status) {
+        Transaction transaction = new Transaction();
+        transaction.setComputer(computer);
+        transaction.setUsername(username);
+        transaction.setStartOn(startOn);
+        transaction.setStatus(status);
+
+        session.save(transaction);
+        return transaction;
+    }
+
+    public void stopRunningTransaction(Transaction transaction, Date endOnDateTime, Double amountToBePaid) {
+        transaction.setEndOn(endOnDateTime);
+        transaction.setAmountToBePaid(amountToBePaid);
+        transaction.setStatus(TransactionStatusEnum.NOT_PAID.value);
+        session.update(transaction);
     }
 }

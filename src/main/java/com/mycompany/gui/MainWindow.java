@@ -194,7 +194,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel27)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
@@ -262,7 +262,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(143, Short.MAX_VALUE))
         );
 
         signInPanel.add(jPanel2);
@@ -378,10 +378,10 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(dashboardContentMonitorPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(dashboardContentMonitorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addGroup(dashboardContentMonitorPanelLayout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE))
+                        .addGap(0, 692, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         dashboardContentMonitorPanelLayout.setVerticalGroup(
@@ -390,7 +390,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         dashboardContentPanel.add(dashboardContentMonitorPanel, "monitorClientPanelCard");
@@ -511,7 +512,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(historyNotPaidTransactionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(historyTransactionAmountPaidByClientTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel26))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(historyTransactionPayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -585,7 +586,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jLabel23)
                     .addComponent(historyTransactionStatusLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(historyPrintButton, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(historyPrintButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -782,7 +783,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(settingCostPerHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(updateSettingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dashboardContentPanel.add(dashboardContentSettingPanel, "settingPanelCard");
@@ -856,7 +857,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel25)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profileOldPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profilePasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -881,7 +882,7 @@ public class MainWindow extends javax.swing.JFrame {
         );
         dashboardContentLogoutPanelLayout.setVerticalGroup(
             dashboardContentLogoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 378, Short.MAX_VALUE)
+            .addGap(0, 373, Short.MAX_VALUE)
         );
 
         dashboardContentPanel.add(dashboardContentLogoutPanel, "logoutPanelCard");
@@ -904,7 +905,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(dashboardLoadingPanelLayout.createSequentialGroup()
                 .addGap(83, 83, 83)
                 .addComponent(jLabel24)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         dashboardContentPanel.add(dashboardLoadingPanel, "dashboardLoadingPanelCard");
@@ -920,12 +921,12 @@ public class MainWindow extends javax.swing.JFrame {
         dashboardPanelLayout.setVerticalGroup(
             dashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(dashboardContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 59, Short.MAX_VALUE)
+                .addComponent(dashboardContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(dashboardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(dashboardPanelLayout.createSequentialGroup()
                     .addComponent(dashboardTabsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 321, Short.MAX_VALUE)))
+                    .addGap(0, 375, Short.MAX_VALUE)))
         );
 
         mainPanel.add(dashboardPanel, "dashboardPanelCard");
@@ -1019,6 +1020,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
     
     public void prepareClientComputersTableModelAndAddComputersData(List<Computer> computers) {
+        
         DefaultTableModel clientComputersTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int i, int i1) {
@@ -1327,12 +1329,12 @@ public class MainWindow extends javax.swing.JFrame {
         
         try {
             JasperReport jspr = JasperCompileManager
-                    .compileReport(rootDirectory + "/src/main/resources/jasper/history_transaction_3.jrxml");
+                    .compileReport(rootDirectory + "/src/main/resources/jasper/history_transaction.jrxml");
             JasperPrint jasperPrint = JasperFillManager
                 .fillReport(jspr, param, ds);
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }  
     }//GEN-LAST:event_historyPrintButtonActionPerformed
     
