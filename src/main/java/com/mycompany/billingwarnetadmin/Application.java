@@ -9,49 +9,72 @@ import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.SettingRepository;
 import com.mycompany.application.repositories.TransactionRepository;
 import com.mycompany.application.repositories.UserRepository;
+import com.mycompany.application.services.AdminConfigService;
 import com.mycompany.gui.MainWindow;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import javax.swing.*;
+import java.util.Properties;
 
 public class Application {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
 
-        configuration.addAnnotatedClass(User.class);
-        configuration.addAnnotatedClass(Computer.class);
-        configuration.addAnnotatedClass(Setting.class);
-        configuration.addAnnotatedClass(Transaction.class);
+        try {
+            AdminConfigService config = new AdminConfigService(
+                new String[] {
+                    System.getProperty("user.dir") + "/admin.config.json",
+                    System.getProperty("user.dir") + "/src/main/resources/config/admin.config.json"
+                }
+            );
 
-        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties())
-                .build();
+            Properties properties = new Properties();
+            properties.put("hibernate.connection.url", config.getDatabaseConnectionUrl().get());
+            properties.put("hibernate.connection.username", config.getDatabaseUsername().get());
+            properties.put("hibernate.connection.password", config.getDatabasePassword().get());
 
-        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperties(properties);
 
-        UserRepository userRepository = new UserRepository(session);
-        ComputerRepository computerRepository = new ComputerRepository(session);
-        SettingRepository settingRepository = new SettingRepository(session);
-        TransactionRepository transactionRepository = new TransactionRepository(session);
+            configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Computer.class);
+            configuration.addAnnotatedClass(Setting.class);
+            configuration.addAnnotatedClass(Transaction.class);
 
-        ApplicationState applicationState = new ApplicationState(
-                session,
-                userRepository,
-                computerRepository,
-                settingRepository,
-                transactionRepository
-        );
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties())
+                    .build();
 
-        MainWindow mainWindow = new MainWindow(applicationState);
+            SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+            Session session = sessionFactory.openSession();
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                mainWindow.setVisible(true);
-            }
-        });
+            UserRepository userRepository = new UserRepository(session);
+            ComputerRepository computerRepository = new ComputerRepository(session);
+            SettingRepository settingRepository = new SettingRepository(session);
+            TransactionRepository transactionRepository = new TransactionRepository(session);
+
+            ApplicationState applicationState = new ApplicationState(
+                    config,
+                    session,
+                    userRepository,
+                    computerRepository,
+                    settingRepository,
+                    transactionRepository
+            );
+
+            MainWindow mainWindow = new MainWindow(applicationState);
+
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    mainWindow.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 }

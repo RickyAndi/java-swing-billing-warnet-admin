@@ -6,13 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Optional;
 
-public class ClientConfigService {
+public class AdminConfigService {
 
-    private JSONObject computer;
     private JSONObject database;
     private JSONObject socketServer;
 
-    public ClientConfigService(String[] configJsonFilePaths) throws Exception {
+    public AdminConfigService(String[] configJsonFilePaths) throws Exception {
         FileReader fileReader = null;
         for (String jsonFilePath : configJsonFilePaths) {
             try {
@@ -28,9 +27,8 @@ public class ClientConfigService {
         }
 
         JSONObject jsonObject = (JSONObject) new JSONParser().parse(fileReader);
-        computer = (JSONObject) jsonObject.get("computer");
-        socketServer = (JSONObject) jsonObject.get("socket_server");
         database = (JSONObject) jsonObject.get("database");
+        socketServer = (JSONObject) jsonObject.get("socket_server");
     }
 
     public Optional<String> getDatabaseConnectionUrl() {
@@ -76,15 +74,6 @@ public class ClientConfigService {
     public Optional<Long> getSocketServerPort() {
         try {
             return Optional.of((Long) socketServer.get("port"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return Optional.empty();
-        }
-    }
-
-    public Optional<String> getComputerName() {
-        try {
-            return Optional.of((String) computer.get("name"));
         } catch (Exception e) {
             return Optional.empty();
         }

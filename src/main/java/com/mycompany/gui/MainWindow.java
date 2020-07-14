@@ -13,6 +13,7 @@ import com.mycompany.application.entities.User;
 import com.mycompany.application.enums.CurrencyAbbrevationEnum;
 import com.mycompany.application.enums.ErrorMessageEnum;
 import com.mycompany.application.enums.MessageEnum;
+import com.mycompany.application.enums.SocketEventNameEnum;
 import com.mycompany.application.exceptions.AmountPaidByClientIsNotEnoughException;
 import com.mycompany.application.exceptions.OldPasswordDoesNotMatchException;
 import com.mycompany.application.exceptions.RepeatPasswordDoesNotMatchException;
@@ -33,6 +34,10 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -45,6 +50,8 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author rickyandhi
  */
 public class MainWindow extends javax.swing.JFrame {
+
+    Optional<Socket> socket = Optional.empty();
 
     private ApplicationState applicationState;
     private CardLayout mainPanelCardLayout;
@@ -66,6 +73,31 @@ public class MainWindow extends javax.swing.JFrame {
                 .getLayout();
         this.historyChangeTransactionStatusPanelCardLayout = 
                 (CardLayout) historyChangeTransactionStatusPanel.getLayout();
+    }
+
+    private void initializeSocketConnection() throws Exception {
+        MainWindow mainWindow = this;
+
+        String socketServerHost = applicationState.getSocketServerHost();
+        Long socketServerPort = applicationState.getSocketServerPort();
+        Socket socket = IO.socket("http://" + socketServerHost + ":" + socketServerPort.toString());
+        socket
+            .on(SocketEventNameEnum.CLIENT_LOGGED_IN.name, new Emitter.Listener() {
+                @Override
+                public void call(Object... objects) {
+                    mainWindow.doWhenDashboardStatusShown();
+                }
+            })
+            .on(SocketEventNameEnum.CLIENT_LOGGED_OUT.name, new Emitter.Listener() {
+                @Override
+                public void call(Object... objects) {
+                    mainWindow.doWhenDashboardStatusShown();
+                }
+            });
+
+        socket.connect();
+        
+        this.socket = Optional.of(socket);
     }
 
     /**
@@ -1083,11 +1115,22 @@ public class MainWindow extends javax.swing.JFrame {
         clientComputersActiveTimeAnimation = Optional.of(activeTimeAnimation);
     }
     
-    private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
+    private void doWhenDashboardStatusShown() {
         applicationState.getClientComputersAction();
         List<Computer> computers = applicationState.getClientComputers();
         prepareClientComputersTableModelAndAddComputersData(computers);
         animateClienComputersTableActiveTime();
+    }
+    
+    private void dashboardContentMonitorPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardContentMonitorPanelComponentShown
+        this.doWhenDashboardStatusShown();
+
+        try {
+            this.initializeSocketConnection();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Koneksi web socket gagal");
+        }
+
     }//GEN-LAST:event_dashboardContentMonitorPanelComponentShown
 
     private void dashboardPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardPanelComponentShown
@@ -1270,6 +1313,12 @@ public class MainWindow extends javax.swing.JFrame {
         if (clientComputersActiveTimeAnimation.isPresent()) {
             clientComputersActiveTimeAnimation.get().stop();
         }
+
+        if (socket.isPresent()) {
+            socket.get().close();
+            socket = Optional.empty();
+        }
+
     }//GEN-LAST:event_dashboardContentMonitorPanelComponentHidden
 
     private void historyTransactionPayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyTransactionPayButtonActionPerformed

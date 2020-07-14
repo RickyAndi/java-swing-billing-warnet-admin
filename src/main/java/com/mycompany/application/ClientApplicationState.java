@@ -11,6 +11,8 @@ import com.mycompany.application.exceptions.ComputerNameIsNotSetException;
 import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.SettingRepository;
 import com.mycompany.application.repositories.TransactionRepository;
+import com.mycompany.application.services.AdminConfigService;
+import com.mycompany.application.services.ClientConfigService;
 import org.hibernate.Session;
 
 import java.util.Date;
@@ -18,6 +20,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class ClientApplicationState {
+
+    private ClientConfigService config;
 
     private Optional<String> currentComputerName;
     private Optional<String> currentUsername = Optional.empty();
@@ -36,11 +40,13 @@ public class ClientApplicationState {
     private TransactionRepository transactionRepository;
 
     public ClientApplicationState(
+            ClientConfigService config,
             Session session,
             SettingRepository settingRepository,
             ComputerRepository computerRepository,
             TransactionRepository transactionRepository
     ) {
+        this.config = config;
         this.session = session;
         this.settingRepository = settingRepository;
         this.computerRepository = computerRepository;
@@ -205,5 +211,13 @@ public class ClientApplicationState {
         transactionRepository.stopRunningTransaction(currentTransaction, endOnDateTime, currentTariff);
         computerRepository.markAsInactive(currentComputer);
         logoutTransaction.commit();
+    }
+
+    public String getSocketServerHost() {
+        return config.getSocketServerHost().get();
+    }
+
+    public Long getSocketServerPort() {
+        return config.getSocketServerPort().get();
     }
 }

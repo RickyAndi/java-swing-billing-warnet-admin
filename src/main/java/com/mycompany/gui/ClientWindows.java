@@ -10,6 +10,11 @@ import com.mycompany.application.entities.Computer;
 import com.mycompany.application.entities.Setting;
 import com.mycompany.application.enums.CurrencyAbbrevationEnum;
 import com.mycompany.application.enums.ErrorMessageEnum;
+import com.mycompany.application.enums.SocketEventNameEnum;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import org.json.simple.JSONObject;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,9 +30,11 @@ import javax.swing.Timer;
  * @author ADMIN
  */
 public class ClientWindows extends javax.swing.JFrame {
-    
+
     private ClientApplicationState applicationState;
-    
+
+    private Socket socket;
+
     private CardLayout dashboardPanelCardLayout;
     private CardLayout mainPanelCardLayout;
     private Optional<Timer> tariffAndTimeAnimation = Optional.empty();
@@ -35,7 +42,7 @@ public class ClientWindows extends javax.swing.JFrame {
     /**
      * Creates new form ClientWindows
      */
-    public ClientWindows(ClientApplicationState clientApplicationState) {
+    public ClientWindows(ClientApplicationState clientApplicationState) throws Exception {
         this.applicationState = clientApplicationState;
         
         initComponents();
@@ -44,6 +51,16 @@ public class ClientWindows extends javax.swing.JFrame {
         
         mainPanelCardLayout = (CardLayout) mainPanel.getLayout();
         dashboardPanelCardLayout = (CardLayout) dashboardPanel.getLayout();
+
+        this.initializeSocketConnection();
+    }
+
+    private void initializeSocketConnection() throws Exception {
+        String socketServerHost = applicationState.getSocketServerHost();
+        Long socketServerPort = applicationState.getSocketServerPort();
+        System.out.println(socketServerPort);
+        socket = IO.socket("http://" + socketServerHost + ":" + socketServerPort.toString());
+        socket.connect();
     }
 
     /**
@@ -327,7 +344,6 @@ public class ClientWindows extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void loginPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_loginPanelComponentShown
         this.changeWarnetNameLabel();
     }//GEN-LAST:event_loginPanelComponentShown
@@ -343,6 +359,16 @@ public class ClientWindows extends javax.swing.JFrame {
                     );
             } else {
                 applicationState.loginAction(currentUsername);
+
+                JSONObject eventPayload = new JSONObject();
+                eventPayload.put("computer_name", applicationState.getCurrentComputer().get().getName());
+                socket.emit(SocketEventNameEnum.CLIENT_LOGGED_OUT.name, eventPayload);
+
+                socket.emit(
+                        SocketEventNameEnum.CLIENT_LOGGED_IN.name,
+                        eventPayload
+                );
+
                 mainPanelCardLayout
                         .show(mainPanel, "dashboardPanelCard");
                 dashboardPanelCardLayout
@@ -416,6 +442,11 @@ public class ClientWindows extends javax.swing.JFrame {
         
         dashboardPanelCardLayout
                 .show(dashboardPanel, "dashboardTarifInformationPanelCard");
+
+        JSONObject eventPayload = new JSONObject();
+        eventPayload.put("computer_name", applicationState.getCurrentComputer().get().getName());
+        socket.emit(SocketEventNameEnum.CLIENT_LOGGED_OUT.name, eventPayload);
+
     }//GEN-LAST:event_logoutConfirmationYesButtonActionPerformed
 
     private void dashboardTarifToLoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardTarifToLoginButtonActionPerformed

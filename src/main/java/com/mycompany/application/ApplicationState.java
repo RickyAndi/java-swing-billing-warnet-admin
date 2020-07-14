@@ -20,6 +20,7 @@ import com.mycompany.application.repositories.ComputerRepository;
 import com.mycompany.application.repositories.SettingRepository;
 import com.mycompany.application.repositories.TransactionRepository;
 import com.mycompany.application.repositories.UserRepository;
+import com.mycompany.application.services.AdminConfigService;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
 
@@ -37,6 +38,8 @@ import java.util.Optional;
  * @author rickyandhi
  */
 public class ApplicationState {
+
+    private AdminConfigService config;
 
     private Session session;
 
@@ -57,13 +60,14 @@ public class ApplicationState {
     private TransactionRepository transactionRepository;
 
     public ApplicationState(
+            AdminConfigService config,
             Session session,
             UserRepository userRepository,
             ComputerRepository computerRepository,
             SettingRepository settingRepository,
             TransactionRepository transactionRepository
     ) {
-
+        this.config = config;
         this.session = session;
         this.userRepository = userRepository;
         this.computerRepository = computerRepository;
@@ -298,5 +302,13 @@ public class ApplicationState {
 
     public Optional<Transaction> getSelectedTransaction() {
         return selectedTransaction;
+    }
+
+    public String getSocketServerHost() {
+        return config.getSocketServerHost().get();
+    }
+
+    public Long getSocketServerPort() {
+        return config.getSocketServerPort().get();
     }
 }
