@@ -1,15 +1,15 @@
 {
   "database": {
-    "connection_url": "jdbc:mysql://127.0.0.1/billingwarnetreal?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Jakarta",
-    "name": "billingwarnetreal",
-    "username": "root",
-    "password": "password"
+    "connection_url": "jdbc:mysql://127.0.0.1/{database_name}?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Jakarta",
+    "name": "{database_name}",
+    "username": "{database_username}",
+    "password": "{database_password}"
   },
   "computer": {
-    "name": "PC-4"
+    "name": "{computer_name}"
   },
   "socket_server": {
-    "host": "localhost",
+    "host": "{socket_server_host}",
     "port" : 8000
   }
 }
