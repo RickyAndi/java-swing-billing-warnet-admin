@@ -248,6 +248,10 @@ public class ApplicationState {
         this.currentUser = currentUser;
     }
 
+    public void removeCurrentUserAction() {
+        this.setCurrentUser(Optional.empty());
+    }
+
     public List<Computer> getClientComputers() {
         return clientComputers;
     }

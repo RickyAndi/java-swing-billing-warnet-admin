@@ -144,7 +144,7 @@ public class ClientApplicationState {
     public void getInitialDataAction()
         throws ComputerNameIsNotSetException, ComputerClientDoesNotExistException
     {
-        if (getCurrentComputerName().isEmpty()) {
+        if (!getCurrentComputerName().isPresent()) {
             throw new ComputerNameIsNotSetException(
                 ErrorMessageEnum.CLIENT_COMPUTER_NAME_IS_NOT_SET.message
             );
@@ -152,7 +152,7 @@ public class ClientApplicationState {
 
         Optional<Computer> currentComputer = computerRepository
                 .getComputerByName(getCurrentComputerName().get());
-        if (currentComputer.isEmpty()) {
+        if (!currentComputer.isPresent()) {
             throw new ComputerClientDoesNotExistException(
                 ErrorMessageEnum.CLIENT_COMPUTER_NAME_IS_NOT_SET.message
             );

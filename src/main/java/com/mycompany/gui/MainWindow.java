@@ -188,6 +188,10 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
         profileOldPasswordTextField = new javax.swing.JPasswordField();
         dashboardContentLogoutPanel = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel28 = new javax.swing.JLabel();
+        logoutConfirmationYesButton = new javax.swing.JButton();
+        logoutConfirmationNoButton = new javax.swing.JButton();
         dashboardLoadingPanel = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
 
@@ -906,15 +910,67 @@ public class MainWindow extends javax.swing.JFrame {
 
         dashboardContentLogoutPanel.setBackground(new java.awt.Color(180, 234, 246));
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel28.setText("Apakah anda yakin akan keluar ?");
+
+        logoutConfirmationYesButton.setText("Ya");
+        logoutConfirmationYesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutConfirmationYesButtonActionPerformed(evt);
+            }
+        });
+
+        logoutConfirmationNoButton.setBackground(new java.awt.Color(255, 255, 255));
+        logoutConfirmationNoButton.setText("Tidak");
+        logoutConfirmationNoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutConfirmationNoButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(jLabel28)
+                .addContainerGap(268, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logoutConfirmationNoButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(logoutConfirmationYesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(jLabel28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(logoutConfirmationNoButton)
+                    .addComponent(logoutConfirmationYesButton))
+                .addGap(45, 45, 45))
+        );
+
         javax.swing.GroupLayout dashboardContentLogoutPanelLayout = new javax.swing.GroupLayout(dashboardContentLogoutPanel);
         dashboardContentLogoutPanel.setLayout(dashboardContentLogoutPanelLayout);
         dashboardContentLogoutPanelLayout.setHorizontalGroup(
             dashboardContentLogoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 876, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardContentLogoutPanelLayout.createSequentialGroup()
+                .addContainerGap(167, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(159, 159, 159))
         );
         dashboardContentLogoutPanelLayout.setVerticalGroup(
             dashboardContentLogoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 373, Short.MAX_VALUE)
+            .addGroup(dashboardContentLogoutPanelLayout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         dashboardContentPanel.add(dashboardContentLogoutPanel, "logoutPanelCard");
@@ -1042,13 +1098,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         dashboardContentPanelCardLayout.show(dashboardContentPanel, "logoutPanelCard");
-        int selectedOption = JOptionPane.showConfirmDialog(null,
-        "Apakah Anda Yakin Akan Keluar?", "Logout", JOptionPane.YES_NO_OPTION);
-        if (selectedOption == JOptionPane.YES_OPTION) {
-            this.mainPanelCardLayout.show(mainPanel, "signinPanelCard");
-        }
-        
-    
     }//GEN-LAST:event_logoutButtonActionPerformed
     
     public void prepareClientComputersTableModelAndAddComputersData(List<Computer> computers) {
@@ -1386,6 +1435,18 @@ public class MainWindow extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }  
     }//GEN-LAST:event_historyPrintButtonActionPerformed
+
+    private void logoutConfirmationNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutConfirmationNoButtonActionPerformed
+        this.dashboardContentPanelCardLayout
+                .show(dashboardContentPanel, "monitorClientPanelCard");
+    }//GEN-LAST:event_logoutConfirmationNoButtonActionPerformed
+
+    private void logoutConfirmationYesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutConfirmationYesButtonActionPerformed
+        this.applicationState
+                .removeCurrentUserAction();
+        this.mainPanelCardLayout
+                .show(mainPanel, "signinPanelCard");
+    }//GEN-LAST:event_logoutConfirmationYesButtonActionPerformed
     
     private String getTransactionAmountPaidByClient(Transaction transaction) {
         return CurrencyAbbrevationEnum.RUPIAH.currencyAbbr + 
@@ -1566,6 +1627,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1576,10 +1638,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JButton logoutConfirmationNoButton;
+    private javax.swing.JButton logoutConfirmationYesButton;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPasswordField passwordTextField;
     private javax.swing.JPasswordField profileOldPasswordTextField;

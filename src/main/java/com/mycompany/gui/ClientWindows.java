@@ -386,7 +386,7 @@ public class ClientWindows extends javax.swing.JFrame {
     private void dashboardStatusPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dashboardStatusPanelComponentShown
         ClientWindows mainWindow = this;
         
-        if (this.tariffAndTimeAnimation.isEmpty()) {
+        if (!this.tariffAndTimeAnimation.isPresent()) {
             dashboardStatusUsernameTextField.setText(
                 applicationState.getCurrentUsername().get()
             );
