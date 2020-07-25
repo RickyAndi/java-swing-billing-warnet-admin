@@ -63,12 +63,6 @@
         </dependency>
         
         <dependency>
-            <groupId>jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-            <version>3.5.3</version>
-        </dependency>
-        
-        <dependency>
             <groupId>io.socket</groupId>
             <artifactId>socket.io-client</artifactId>
             <version>1.0.0</version>
@@ -79,7 +73,11 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.10.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -126,12 +126,4 @@ public class Transaction {
     public Boolean isPaid() {
         return this.getStatus().equals(TransactionStatusEnum.PAID.value);
     }
-
-    public Double getTotalTariffFromDuration(Double costPerHour) {
-        if (this.isActive()) {
-            return 0.0;
-        }
-
-        return 0.0;
-    }
 }

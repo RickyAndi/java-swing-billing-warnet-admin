@@ -135,8 +135,6 @@ public class ApplicationState {
         } else {
             startDate = new DateTime(new Date()).withTime(0,0,0,0).toDate();
             endDate = new DateTime(startDate).plusDays(1).toDate();
-            System.out.println(startDate);
-            System.out.println(endDate);
         }
 
         List<Transaction> transactions = this.transactionRepository
@@ -302,6 +300,13 @@ public class ApplicationState {
 
     public void setSelectedTransaction(Optional<Transaction> selectedTransaction) {
         this.selectedTransaction = selectedTransaction;
+    }
+
+    public Double getTotalAmountOfTransactions() {
+        return this.transactions.stream()
+            .filter(transaction -> transaction.isPaid())
+            .map(transaction -> transaction.getAmountToBePaid())
+            .reduce(0.0, (total, amountToBePaid) -> total + amountToBePaid);
     }
 
     public Optional<Transaction> getSelectedTransaction() {
